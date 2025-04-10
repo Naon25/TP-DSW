@@ -1,6 +1,6 @@
 Tema
 
-Administración de un Club Náutico
+#Administración de un Club Náutico
 Descripción
 
 Sistema web con usuarios diferenciados: socios y administradores.
