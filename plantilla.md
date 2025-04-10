@@ -1,79 +1,55 @@
-Tema
 
-#Administración de un Club Náutico
-Descripción
+# Propuesta TP DSW
 
-Sistema web con usuarios diferenciados: socios y administradores.
+## Grupo
+### Integrantes
+* legajo - Apellido(s), Nombre(s)
+
+### Repositorios
+* [frontend app](http://hyperlinkToGihubOrGitlab)
+* [backend app](http://hyperlinkToGihubOrGitlab)
+*Nota*: si utiliza un monorepo indicar un solo link con fullstack app.
+
+## Administración de un Club Náutico
+### Descripción
+*Sistema web con usuarios diferenciados: socios y administradores.
 Permite a los socios consultar su situación administrativa, reservar servicios y ver disponibilidad de infraestructura.
 Los administradores pueden gestionar socios, embarcaciones, cuotas, reservas, boxes y amarres, así como también consultar reportes de ocupación y deuda.
-Modelo
+Modelo)*
 
-📌 Link al modelo de dominio / DER / diagrama de clases: [Link a imagen o diagrama]
-(o usar diagrama Mermaid directamente en el README del repo si se prefiere)
-Alcance Funcional
-Alcance Mínimo
+### Modelo
+![imagen del modelo]()
 
-CRUD Simple (4):
+*Nota*: incluir un link con la imagen de un modelo, puede ser modelo de dominio, diagrama de clases, DER. Si lo prefieren pueden utilizar diagramas con [Mermaid](https://mermaid.js.org) en lugar de imágenes.
 
-    Socio – Alta, baja, modificación y consulta de socios.
+## Alcance Funcional 
 
-    Box – Gestión de boxes en tierra (ubicación, estado).
+### Alcance Mínimo
 
-    Amarra – Gestión de amarres en el agua (ubicación, estado).
+*Nota*: el siguiente es un ejemplo para un grupo de 3 integrantes para un sistema de hotel. El 
 
-    BotesClub - Gestión de prestación de botes del club(estado, cantidad, tipo).
+Regularidad:
+|Req|Detalle|
+|:-|:-|
+|CRUD simple|1. CRUD Socio<br>2. CRUD Box<br>3. CRUD Amarra<br>4. CRUD BotesClub|
+|CRUD dependiente|1. CRUD CuotaMensual {depende de} CRUD Tipo Socio<br>2. CRUD Embarcacion {depende de} CRUD Socio y CRUD Amarra o CRUD Box|
+|Listado<br>+<br>detalle| 1. Listado de cuotas impagas filtrado por socio => detalle nombre del socio, mes, monto<br> 2. Listado de boxes y amarras filtrado por zona y estado => detalle muestra datos del box|
+|CUU/Epic|1. El administrador registra el pago de una cuota y consulta la deuda total del socio.<br>2. La embarción cambia a una nueva Amarra|
 
-CRUD Dependiente (2):
 
-    CuotaMensual – Gestión de las cuotas mensuales generadas y pagadas por los socios.
-    
-    Embarcación (depende de Socio, y puede estar asociada a una Amarra o Box).
+Adicionales para Aprobación
+|Req|Detalle|
+|:-|:-|
+|CRUD |1. CRUD Socio<br>2. CRUD Box<br>3. CRUD Amarra<br>4. CRUD BotesClub<br>5. CRUD ReservaTravelLift|
+|CUU/Epic|1. El socio reserva el travel lift para una embarcación.<br>2.Socio reserva uso de bote del club|
 
-    //ReservaTravelLift (depende de Socio y de una Embarcación).
 
-Listados con filtro + detalle (2):
+### Alcance Adicional Voluntario
 
-    Listado de cuotas impagas
+*Nota*: El Alcance Adicional Voluntario es opcional, pero ayuda a que la funcionalidad del sistema esté completa y será considerado en la nota en función de su complejidad y esfuerzo.
 
-        Filtro: por mes o tipo de cuota. O por socio
-
-        Detalle: nombre del socio, monto, vencimiento, estado
-
-    Listado de boxes filtrado por zona y estado
-        Detalle: Zona, ID, estado
-
-    //Listado de reservas del travel lift
-
-        //Filtro: por fecha
-
-        //Detalle: socio, embarcación, fecha y hora, observaciones
-
-CUU / Epic (2):
-
-    //El socio reserva el travel lift para una embarcación.
-
-    El administrador registra el pago de una cuota y consulta la deuda total del socio.
-
-    LA embarción cambia a una nueva Amarra
-
-    
-
-Alcance Adicional Voluntario (Opcional)
-
-Listados:
-
-    Reporte de ocupación de amarres y boxes
-
-    Reporte de morosidad, con socios que deben más de X cuotas
-
-CUU / Epic:
-
-    Suspensión automática de socios con más de 3 cuotas impagas
-
-    Envío automático de recordatorios de pago
-
-Otros:
-
-    Vista gráfica o visual de los amarres y boxes, con estado de ocupación (color verde/rojo/gris, por ejemplo)
-
-    //Observaciones en la reserva del travel lift (motivo, duración estimada, etc.)
+|Req|Detalle|
+|:-|:-|
+|Listados |1. Reporte de morosidad, con socios que deben más de X cuotas<br>|
+|CUU/Epic|1. Implementar lista de espera de amarra<br>2.Vista gráfica o visual de los amarres y boxes, con estado de ocupación (color verde/rojo/gris, por ejemplo)|
+|Otros|1. Envío automático de recordatorios de pago|
