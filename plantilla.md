@@ -42,7 +42,7 @@ Adicionales para Aprobación
 |Req|Detalle|
 |:-|:-|
 |CRUD |1. CRUD Socio<br>2. CRUD Box<br>3. CRUD Amarra<br>4. CRUD BotesClub<br>5. CRUD ReservaTravelLift|
-|CUU/Epic|1. El administrador registra el pago de una cuota y consulta la deuda total del socio.<br>2. La embarción cambia a una nueva Amarra.<br>3. El socio reserva el travel lift para una embarcación.<br>2.Socio reserva uso de bote del club|
+|CUU/Epic|1. El administrador registra el pago de una cuota y consulta la deuda total del socio.<br>2. La embarción cambia a una nueva Amarra.<br>3. El socio reserva el travel lift para una embarcación.<br>4. Socio reserva uso de bote del club|
 
 
 ### Alcance Adicional Voluntario
