@@ -5,8 +5,8 @@
 ### Integrantes
 * 51474 - Galasco Alexis
 * 48833 - Soler Leandro
-* legajo - apellido nombre
-* legajo - apellido nombre
+* 53120 - Foronda Juan Manuel
+* 52441 - Agustin Rivero
 
 ### Repositorios
 * [frontend app](http://hyperlinkToGihubOrGitlab)
