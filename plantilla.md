@@ -3,7 +3,10 @@
 
 ## Grupo
 ### Integrantes
-* legajo - Apellido(s), Nombre(s)
+* 51474 - Galasco Alexis
+* 48833 - Soler Leandro
+* legajo - apellido nombre
+* legajo - apellido nombre
 
 ### Repositorios
 * [frontend app](http://hyperlinkToGihubOrGitlab)
@@ -25,9 +28,7 @@ Modelo)*
 ## Alcance Funcional 
 
 ### Alcance Mínimo
-
-*Nota*: el siguiente es un ejemplo para un grupo de 3 integrantes para un sistema de hotel. El 
-
+ 
 Regularidad:
 |Req|Detalle|
 |:-|:-|
