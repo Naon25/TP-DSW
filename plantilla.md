@@ -20,6 +20,7 @@ Los administradores pueden gestionar socios, embarcaciones, cuotas, reservas, bo
 Modelo)*
 
 ### Modelo
+![imagen](https://github.com/user-attachments/assets/f3768408-4d43-484b-a4a4-cc6889e44d07)
 
 
 ## Alcance Funcional 
