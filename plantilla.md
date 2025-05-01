@@ -20,7 +20,8 @@ Los administradores pueden gestionar socios, embarcaciones, cuotas, reservas, bo
 Modelo)*
 
 ### Modelo
-![imagen](https://github.com/user-attachments/assets/f3768408-4d43-484b-a4a4-cc6889e44d07)
+![imagen](https://github.com/user-attachments/assets/aef83463-fec4-496b-bbe2-2c7dad5ea02f)
+
 
 
 ## Alcance Funcional 
@@ -30,17 +31,17 @@ Modelo)*
 Regularidad:
 |Req|Detalle|
 |:-|:-|
-|CRUD simple|1. CRUD Socio<br>2. CRUD Box<br>3. CRUD Amarra<br>4. CRUD BotesClub|
-|CRUD dependiente|1. CRUD CuotaMensual {depende de} CRUD Tipo Socio<br>2. CRUD Embarcacion {depende de} CRUD Socio y CRUD Amarra o CRUD Box|
+|CRUD simple|1. CRUD Socio<br>2. CRUD Box<br>3. CRUD Amarra<br>4. CRUD TipoEmbarcacion|
+|CRUD dependiente|1. CRUD Afiliacion {depende de} CRUD Tipo Socio<br>2. CRUD Embarcacion {depende de} CRUD Socio y CRUD TipoEmbarcacion|
 |Listado<br>+<br>detalle| 1. Listado de cuotas impagas filtrado por socio => detalle nombre del socio, mes, monto<br> 2. Listado de boxes y amarras filtrado por zona y estado => detalle muestra datos del box|
-|CUU/Epic|1. El administrador registra el pago de una cuota y consulta la deuda total del socio.<br>2. La embarción cambia a una nueva Amarra|
+|CUU/Epic|1. El administrador genera y registra el pago de una cuota.<br>2. Socio reserva un bote del club|
 
 
 Adicionales para Aprobación
 |Req|Detalle|
 |:-|:-|
-|CRUD |1. CRUD Socio<br>2. CRUD Box<br>3. CRUD Amarra<br>4. CRUD BotesClub<br>5. CRUD ReservaTravelLift|
-|CUU/Epic|1. El administrador registra el pago de una cuota y consulta la deuda total del socio.<br>2. La embarción cambia a una nueva Amarra.<br>3. El socio reserva el travel lift para una embarcación.<br>4. Socio reserva uso de bote del club|
+|CRUD |1. CRUD Socio<br>2. CRUD Box<br>3. CRUD Amarra<br>5. CRUD ReservaTravelLift|
+|CUU/Epic|1.La embarción cambia a una nueva Amarra.<br>3. El socio reserva el travel lift para una embarcación.|
 
 
 ### Alcance Adicional Voluntario
