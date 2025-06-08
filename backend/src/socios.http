@@ -1,0 +1,48 @@
+### obtener todos los socios
+GET http://localhost:3000/api/socios
+
+
+
+### obtener a maradona
+GET http://localhost:3000/api/socios/85659cc4-c917-40f9-a30f-f3c321f303c5
+
+
+
+### Asociar a messi
+POST http://localhost:3000/api/socios
+Content-Type: application/json
+
+{
+  "nombre": "Lionel Messi",
+  "dni": "34364826",
+  "email":"lio.messi.10@gmail.com",
+  "telefono": "3412837598"
+}
+
+
+
+### modificar a maradona
+PUT http://localhost:3000/api/socios/85659cc4-c917-40f9-a30f-f3c321f303c5
+Content-Type: application/json
+
+{
+  "nombre": "Diego Maradona",
+  "dni": "43842560",
+  "email":"la_mano_de_dios@gmail.com",
+  "telefono": "3410002012"  
+}
+
+### modificar por patch
+PATCH http://localhost:3000/api/socios/85659cc4-c917-40f9-a30f-f3c321f303c5
+Content-Type: application/json
+
+{
+  "nombre": "Diego Armando Maradona",
+  "email":"la_pelota_no_se_mancha@hotmail.com"
+}
+
+
+
+### borrar a maradona
+DELETE http://localhost:3000/api/socios/85659cc4-c917-40f9-a30f-f3c321f303c5
+
