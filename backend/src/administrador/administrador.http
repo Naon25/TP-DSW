@@ -1,0 +1,35 @@
+### obtener todos los admin
+GET http://localhost:3000/api/administrador
+
+### crear otro admin
+POST http://localhost:3000/api/administrador
+Content-Type: application/json
+
+{
+  "id": "2",
+  "nombre": "Pepe",
+  "email":"lio.messi.10@gmail.com"
+}
+
+### modificar a administrador 1
+PUT http://localhost:3000/api/administrador/1
+Content-Type: application/json
+
+{
+  "id": "3",
+  "nombre": "Mano",
+  "email":"lio.feo.messi.10@gmail.com" 
+}
+
+### modificar por patch
+PATCH http://localhost:3000/api/administrador/1
+Content-Type: application/json
+
+{
+  "id": "1",
+  "nombre": "Diego Armando Maradona",
+  "email":"la_pelota_no_se_mancha@hotmail.com"
+}
+
+### borrar a administrador 1
+DELETE http://localhost:3000/api/administrador/1
