@@ -1,0 +1,42 @@
+### obtener todos los tiposEmbarcacion
+GET http://localhost:3000/api/tiposEmbarcacion
+
+
+
+### obtener velero
+GET http://localhost:3000/api/tiposEmbarcacion/4b3bc43f-a901-424a-ba61-7c2544639034
+
+
+
+### Crear Lancha
+POST http://localhost:3000/api/tiposEmbarcacion
+Content-Type: application/json
+
+{
+  "nombre": "Lancha",
+  "esloraMaxima": 10
+}
+
+
+
+### modificar a velero
+PUT http://localhost:3000/api/tiposEmbarcacion/4b3bc43f-a901-424a-ba61-7c2544639034
+Content-Type: application/json
+
+{
+  "nombre": "Velero",
+  "esloraMaxima": 30
+}
+
+### modificar por patch
+PATCH http://localhost:3000/api/tiposEmbarcacion/4b3bc43f-a901-424a-ba61-7c2544639034
+Content-Type: application/json
+
+{
+  "esloraMaxima": 25
+}
+
+
+
+### borrar a velero
+DELETE http://localhost:3000/api/tiposEmbarcacion/4b3bc43f-a901-424a-ba61-7c2544639034
