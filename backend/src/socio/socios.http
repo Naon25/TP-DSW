@@ -3,8 +3,8 @@ GET http://localhost:3000/api/socios
 
 
 
-### obtener a maradona
-GET http://localhost:3000/api/socios/85659cc4-c917-40f9-a30f-f3c321f303c5
+### obtener a Alexis
+GET http://localhost:3000/api/socios/1
 
 
 
@@ -14,26 +14,38 @@ Content-Type: application/json
 
 {
   "nombre": "Lionel Messi",
-  "dni": "34364826",
-  "email":"lio.messi.10@gmail.com",
+  "dni": "33.016.244",
+  "email":"lio.messi@gmail.com",
   "telefono": "3412837598"
+}
+
+
+### Asociar a maradona
+POST http://localhost:3000/api/socios
+Content-Type: application/json
+
+{
+  "nombre": "Diego Maradona",
+  "dni": "14.276.579",
+  "email":"la_mano_de_dios@gmail.com",
+  "telefono": "3410002012"  
 }
 
 
 
 ### modificar a maradona
-PUT http://localhost:3000/api/socios/85659cc4-c917-40f9-a30f-f3c321f303c5
+PUT http://localhost:3000/api/socios/5
 Content-Type: application/json
 
 {
   "nombre": "Diego Maradona",
-  "dni": "43842560",
+  "dni": "14.276.579",
   "email":"la_mano_de_dios@gmail.com",
   "telefono": "3410002012"  
 }
 
 ### modificar por patch
-PATCH http://localhost:3000/api/socios/85659cc4-c917-40f9-a30f-f3c321f303c5
+PATCH http://localhost:3000/api/socios/5
 Content-Type: application/json
 
 {
@@ -44,5 +56,5 @@ Content-Type: application/json
 
 
 ### borrar a maradona
-DELETE http://localhost:3000/api/socios/85659cc4-c917-40f9-a30f-f3c321f303c5
+DELETE http://localhost:3000/api/socios/5
 

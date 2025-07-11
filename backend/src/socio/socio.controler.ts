@@ -1,4 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
+//Lo comento porque me hace conflicto con mi crud con bd
+
+/* import { Request, Response, NextFunction } from 'express'
 import { SocioRepository } from './socio.repository.js'
 import { Socio } from './socio.entity.js'
 
@@ -21,20 +23,20 @@ function sanitizeSocioInput(req: Request, res: Response, next: NextFunction) {
   next()
 }
 
-function findAll(req: Request, res: Response) {
-  res.json({ data: repository.findAll() })
+async function findAll(req: Request, res: Response) {
+  res.json({ data: await repository.findAll() })
 }
 
-function findOne(req: Request, res: Response) {
+async function findOne(req: Request, res: Response) {
   const id = req.params.id
-  const socio = repository.findOne({ id })
+  const socio = await repository.findOne({ id })
   if (!socio) {
     return res.status(404).send({ message: 'Socio not found' })
   }
   res.json({ data: socio })
 }
 
-function add(req: Request, res: Response) {
+async function add(req: Request, res: Response) {
   const input = req.body.sanitizedInput
 
   const socioInput = new Socio(
@@ -44,13 +46,12 @@ function add(req: Request, res: Response) {
     input.telefono,
   )
 
-  const socio = repository.add(socioInput)
+  const socio = await repository.add(socioInput)
   return res.status(201).send({ message: 'Socio created', data: socio })
 }
 
-function update(req: Request, res: Response) {
-  req.body.sanitizedInput.id = req.params.id
-  const socio = repository.update(req.body.sanitizedInput)
+async function update(req: Request, res: Response) {
+  const socio = await repository.update(req.params.id, req.body.sanitizedInput)
 
   if (!socio) {
     return res.status(404).send({ message: 'Socio not found' })
@@ -59,9 +60,9 @@ function update(req: Request, res: Response) {
   return res.status(200).send({ message: 'Socio updated successfully', data: socio })
 }
 
-function remove(req: Request, res: Response) {
+async function remove(req: Request, res: Response) {
   const id = req.params.id
-  const socio = repository.delete({ id })
+  const socio = await repository.delete({ id })
 
   if (!socio) {
     res.status(404).send({ message: 'Socio not found' })
@@ -71,3 +72,5 @@ function remove(req: Request, res: Response) {
 }
 
 export { sanitizeSocioInput, findAll, findOne, add, update, remove }
+
+*/

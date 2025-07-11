@@ -1,46 +1,67 @@
+// Lo comento porque me hace conflicto con mi crud con bd
+/*
 import { Repository } from '../shared/repository.js'
 import { Socio } from './socio.entity.js'
+import { pool } from '../shared/db/conn.mysql.js'
+import { ResultSetHeader, RowDataPacket } from 'mysql2'
 
-const socios = [
-  new Socio(
-    'Maradona',
-    '11111111',
-    'd10s@hotmail.com',
-    '3412092834',
-    '85659cc4-c917-40f9-a30f-f3c321f303c5'
-  ),
-]
+
+
 
 export class SocioRepository implements Repository<Socio> {
-  public findAll(): Socio[] | undefined {
-    return socios
+  public async findAll(): Promise<Socio[] | undefined> {
+    const [socios] = await pool.query('select * from socios')
+    return socios as Socio[]
   }
 
-  public findOne(item: { id: string }): Socio | undefined {
-    return socios.find((socio) => socio.id === item.id)
-  }
 
-  public add(item: Socio): Socio | undefined {
-    socios.push(item)
-    return item
-  }
 
-  public update(item: Socio): Socio | undefined {
-    const socioIdx = socios.findIndex((socio) => socio.id === item.id)
 
-    if (socioIdx !== -1) {
-      socios[socioIdx] = { ...socios[socioIdx], ...item }
+  public async findOne(item: { id: string }): Promise<Socio | undefined> {
+    const id = Number.parseInt(item.id)
+    const [socios] = await pool.query<RowDataPacket[]>('select * from socios where id = ?', [id])
+    if (socios.length === 0) {
+      return undefined
     }
-    return socios[socioIdx]
+    const socio = socios[0] as Socio
+    return socio
   }
 
-  public delete(item: { id: string }): Socio | undefined {
-    const socioIdx = socios.findIndex((socio) => socio.id === item.id)
 
-    if (socioIdx !== -1) {
-      const deletedSocios = socios[socioIdx]
-      socios.splice(socioIdx, 1)
-      return deletedSocios
+
+
+  public async add(socioInput: Socio): Promise<Socio | undefined> {
+    const { id, ...socioRow } = socioInput
+    const [result] = await pool.query<ResultSetHeader>('insert into socios set ?', [socioRow])
+    socioInput.id = result.insertId
+
+    return socioInput
+  }
+
+
+
+
+  public async update(id: string, socioInput: Socio): Promise<Socio | undefined> {
+    const socioId = Number.parseInt(id)
+    const {...socioRow } = socioInput
+    await pool.query('update socios set ? where id = ?', [socioRow, socioId])
+
+    return await this.findOne({ id })
+  }
+
+
+
+
+  public async delete(item: { id: string }): Promise<Socio | undefined> {
+    try {
+      const socioToDelete = await this.findOne(item)
+      const socioId = Number.parseInt(item.id)
+      await pool.query('delete from socios where id = ?', socioId)
+      return socioToDelete
+    } catch (error: any) {
+      throw new Error('unable to delete socio')
     }
   }
 }
+
+*/
