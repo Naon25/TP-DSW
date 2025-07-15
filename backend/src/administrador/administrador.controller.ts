@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express"
+/*import { Request, Response, NextFunction } from "express"
 import { AdministradorRepository } from "./administrador.repository.js"
 import { Administrador } from "./administrador.entity.js"
 
@@ -68,4 +68,4 @@ function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeAdministradorInput, findAll, findOne, add, update, remove }
+export { sanitizeAdministradorInput, findAll, findOne, add, update, remove }*/

@@ -1,43 +1,57 @@
 import { Repository } from '../shared/repository.js';
 import { tipoEmbarcacion } from './tipoEmbarcacion.entity.js'; 
+import { pool } from '../shared/db/conn.mysql.js';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
 
-const tiposEmbarcacion = [
+/*const tiposEmbarcacion = [
   new tipoEmbarcacion(
     'Velero',
     15,
     '4b3bc43f-a901-424a-ba61-7c2544639034'),
-];
+];*/
 
 export class tipoEmbarcacionRepository implements Repository<tipoEmbarcacion>{
-    public findAll(): tipoEmbarcacion[] | undefined {
-      return tiposEmbarcacion
+    public async findAll(): Promise<tipoEmbarcacion[] | undefined> {
+      const [tiposEmbarcacion] = await pool.query('select * from tiposEmbarcacion');
+      return tiposEmbarcacion as tipoEmbarcacion[];
     }
   
-    public findOne(item: { id: string }): tipoEmbarcacion | undefined {
-      return tiposEmbarcacion.find((tipo) => tipo.id === item.id)
-    }
-  
-    public add(item: tipoEmbarcacion): tipoEmbarcacion | undefined {
-      tiposEmbarcacion.push(item)
-      return item
-    }
-  
-    public update(item: tipoEmbarcacion): tipoEmbarcacion | undefined {
-      const tipoEmbarcacionIdx = tiposEmbarcacion.findIndex((tipoEmbarcacion) => tipoEmbarcacion.id === item.id)
-  
-      if (tipoEmbarcacionIdx !== -1) {
-        tiposEmbarcacion[tipoEmbarcacionIdx] = { ...tiposEmbarcacion[tipoEmbarcacionIdx], ...item }
+    public async findOne(item: { id: string }): Promise<tipoEmbarcacion | undefined> {
+      const id = Number.parseInt(item.id)
+      const [tiposEmbarcacion] = await pool.query<RowDataPacket[]>('select * from tiposEmbarcacion where id = ?', [id])
+      if (tiposEmbarcacion.length === 0) {
+        return undefined
       }
-      return tiposEmbarcacion[tipoEmbarcacionIdx]
+      const tipoEmbarcacion = tiposEmbarcacion[0] as tipoEmbarcacion
+      return tipoEmbarcacion
+  }
+    
+  
+    public async add(tipoEmbarcacionInput: tipoEmbarcacion): Promise<tipoEmbarcacion | undefined> {
+      const { id, ...tipoEmbarcacionRow } = tipoEmbarcacionInput;
+      const [result] = await pool.query<ResultSetHeader>('insert into tiposEmbarcacion set ?',[tipoEmbarcacionRow]);
+      tipoEmbarcacionInput.id = result.insertId;
+      return tipoEmbarcacionInput;
     }
   
-    public delete(item: { id: string }): tipoEmbarcacion | undefined {
-      const tipoEmbarcacionIdx = tiposEmbarcacion.findIndex((tipoEmbarcacion) => tipoEmbarcacion.id === item.id)
+    public async update(id: string, tipoEmbarcacionInput: tipoEmbarcacion): Promise<tipoEmbarcacion | undefined> {  
+      const tipoEmbarcacionId = Number.parseInt(id);
+      const { ...tipoEmbarcacionRow } = tipoEmbarcacionInput;
+      await pool.query('update tiposEmbarcacion set ? where id = ?', [tipoEmbarcacionRow, tipoEmbarcacionId]);
+      return await this.findOne({ id });
+
+    }
   
-      if (tipoEmbarcacionIdx !== -1) {
-        const deletedtipoEmbarcacions = tiposEmbarcacion[tipoEmbarcacionIdx]
-        tiposEmbarcacion.splice(tipoEmbarcacionIdx, 1)
-        return deletedtipoEmbarcacions
+    public async delete(item: { id: string }): Promise<tipoEmbarcacion | undefined> {
+  
+      try {
+        const tipoEmbarcacionToDelete = await this.findOne(item);
+        const tipoEmbarcacionId = Number.parseInt(item.id);
+        await pool.query('delete from tiposEmbarcacion where id = ?', tipoEmbarcacionId);
+        return tipoEmbarcacionToDelete;
+      } catch (error: any) {
+        throw new Error('unable to delete tipoEmbarcacion');
       }
+
     }
   }

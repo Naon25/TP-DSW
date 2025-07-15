@@ -34,7 +34,7 @@ Content-Type: application/json
 
 
 ### modificar a maradona
-PUT http://localhost:3000/api/socios/5
+PUT http://localhost:3000/api/socios/3
 Content-Type: application/json
 
 {
@@ -45,7 +45,7 @@ Content-Type: application/json
 }
 
 ### modificar por patch
-PATCH http://localhost:3000/api/socios/5
+PATCH http://localhost:3000/api/socios/3
 Content-Type: application/json
 
 {

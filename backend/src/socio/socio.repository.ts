@@ -1,5 +1,5 @@
 // Lo comento porque me hace conflicto con mi crud con bd
-/*
+
 import { Repository } from '../shared/repository.js'
 import { Socio } from './socio.entity.js'
 import { pool } from '../shared/db/conn.mysql.js'
@@ -64,4 +64,3 @@ export class SocioRepository implements Repository<Socio> {
   }
 }
 
-*/

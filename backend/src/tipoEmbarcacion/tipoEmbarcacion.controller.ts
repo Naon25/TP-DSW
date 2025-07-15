@@ -19,20 +19,20 @@ function sanitizeTipoEmbarcacionInput(req: Request, res: Response, next: NextFun
   next()
 }
 
-function findAll(req: Request, res: Response) {
-  res.json({ data: repository.findAll() })
+async function findAll(req: Request, res: Response) {
+  res.json({ data: await repository.findAll() })
 }
 
-function findOne(req: Request, res: Response) {
+async function findOne(req: Request, res: Response) {
   const id = req.params.id
-  const tipoEmb = repository.findOne({ id })
+  const tipoEmb = await repository.findOne({ id })
   if (!tipoEmb) {
-    return res.status(404).send({ message: 'Socio not found' })
+    return res.status(404).send({ message: 'tipoEmbarcacion not found' })
   }
   res.json({ data: tipoEmb })
 }
 
-function add(req: Request, res: Response) {
+async function add(req: Request, res: Response) {
   const input = req.body.sanitizedInput
 
   const tipoEmbarcacionInput = new tipoEmbarcacion(
@@ -40,13 +40,12 @@ function add(req: Request, res: Response) {
     input.esloraMaxima
   )
 
-  const tipoEmb = repository.add(tipoEmbarcacionInput)
+  const tipoEmb = await repository.add(tipoEmbarcacionInput)
   return res.status(201).send({ message: 'TipoEmbarcacion created', data: tipoEmb })
 }
 
-function update(req: Request, res: Response) {
-  req.body.sanitizedInput.id = req.params.id
-  const tipoEmb = repository.update(req.body.sanitizedInput)
+async function update(req: Request, res: Response) {
+  const tipoEmb = await repository.update(req.params.id, req.body.sanitizedInput)
 
   if (!tipoEmb) {
     return res.status(404).send({ message: 'TipoEmbarcacion not found' })
@@ -55,9 +54,9 @@ function update(req: Request, res: Response) {
   return res.status(200).send({ message: 'TipoEmbarcacion updated successfully', data: tipoEmb })
 }
 
-function remove(req: Request, res: Response) {
+async function remove(req: Request, res: Response) {
   const id = req.params.id
-  const tipoEmb = repository.delete({ id })
+  const tipoEmb = await repository.delete({ id })
 
   if (!tipoEmb) {
     res.status(404).send({ message: 'TipoEmbarcacion not found' })
