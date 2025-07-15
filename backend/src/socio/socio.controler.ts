@@ -1,6 +1,6 @@
 //Lo comento porque me hace conflicto con mi crud con bd
 
-/* import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { SocioRepository } from './socio.repository.js'
 import { Socio } from './socio.entity.js'
 
@@ -73,4 +73,3 @@ async function remove(req: Request, res: Response) {
 
 export { sanitizeSocioInput, findAll, findOne, add, update, remove }
 
-*/

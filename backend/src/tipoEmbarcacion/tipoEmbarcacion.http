@@ -4,23 +4,23 @@ GET http://localhost:3000/api/tiposEmbarcacion
 
 
 ### obtener velero
-GET http://localhost:3000/api/tiposEmbarcacion/4b3bc43f-a901-424a-ba61-7c2544639034
+GET http://localhost:3000/api/tiposEmbarcacion/1
 
 
 
-### Crear Lancha
+### Crear catamaran
 POST http://localhost:3000/api/tiposEmbarcacion
 Content-Type: application/json
 
 {
-  "nombre": "Lancha",
+  "nombre": "Catamaran",
   "esloraMaxima": 10
 }
 
 
 
 ### modificar a velero
-PUT http://localhost:3000/api/tiposEmbarcacion/4b3bc43f-a901-424a-ba61-7c2544639034
+PUT http://localhost:3000/api/tiposEmbarcacion/1
 Content-Type: application/json
 
 {
@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### modificar por patch
-PATCH http://localhost:3000/api/tiposEmbarcacion/4b3bc43f-a901-424a-ba61-7c2544639034
+PATCH http://localhost:3000/api/tiposEmbarcacion/1
 Content-Type: application/json
 
 {
@@ -39,4 +39,4 @@ Content-Type: application/json
 
 
 ### borrar a velero
-DELETE http://localhost:3000/api/tiposEmbarcacion/4b3bc43f-a901-424a-ba61-7c2544639034
+DELETE http://localhost:3000/api/tiposEmbarcacion/1

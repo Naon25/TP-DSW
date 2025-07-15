@@ -1,4 +1,4 @@
-import { Repository } from '../shared/repository.js'
+/*import { Repository } from '../shared/repository.js'
 import { Administrador } from './administrador.entity.js'
 
 const administrador = [
@@ -40,4 +40,4 @@ export class AdministradorRepository implements Repository<Administrador>{
         return deletedAdministrador
       }
     }
-  }
+  }*/

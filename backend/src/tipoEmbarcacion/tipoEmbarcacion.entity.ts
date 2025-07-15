@@ -4,6 +4,6 @@ export class tipoEmbarcacion{
     constructor(
         public nombre:string,
         public esloraMaxima:number,
-        public id = crypto.randomUUID()
+        public id?: number
     ){}
 }
