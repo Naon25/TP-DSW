@@ -1,4 +1,4 @@
-/*import { Request, Response, NextFunction } from "express"
+import { Request, Response, NextFunction } from "express"
 import { AdministradorRepository } from "./administrador.repository.js"
 import { Administrador } from "./administrador.entity.js"
 
@@ -20,35 +20,34 @@ function sanitizeAdministradorInput(req: Request, res: Response, next: NextFunct
   next()
 }
 
-function findAll(req: Request, res: Response) {
-  res.json({ data: repository.findAll() })
+async function findAll(req: Request, res: Response) {
+  res.json({ data: await repository.findAll() })
 }
 
-function findOne(req: Request, res: Response) {
+async function findOne(req: Request, res: Response) {
   const id = req.params.id
-  const admin = repository.findOne({ id })
+  const admin = await repository.findOne({ id })
   if (!admin) {
     return res.status(404).send({ message: 'Administrador not found' })
   }
   res.json({ data: admin })
 }
 
-function add(req: Request, res: Response) {
+async function add(req: Request, res: Response) {
   const input = req.body.sanitizedInput
 
   const adminsitradorImput = new Administrador(
-    input.id,
     input.nombre, 
     input.email
   )
 
-  const admin = repository.add(adminsitradorImput)
+  const admin = await repository.add(adminsitradorImput)
   return res.status(201).send({ message: 'Administrador created', data: admin })
 }
 
-function update(req: Request, res: Response) {
+async function update(req: Request, res: Response) {
   req.body.sanitizedInput.id = req.params.id
-  const admin = repository.update(req.body.sanitizedInput)
+  const admin = await repository.update(req.params.id,req.body.sanitizedInput)
 
   if (!admin) {
     return res.status(404).send({ message: 'Administrador not found' })
@@ -57,9 +56,9 @@ function update(req: Request, res: Response) {
   return res.status(200).send({ message: 'Administrador updated successfully', data: admin })
 }
 
-function remove(req: Request, res: Response) {
+async function remove(req: Request, res: Response) {
   const id = req.params.id
-  const admin = repository.delete({ id })
+  const admin = await repository.delete({ id })
 
   if (!admin) {
     res.status(404).send({ message: 'Administrador not found' })
@@ -68,4 +67,4 @@ function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeAdministradorInput, findAll, findOne, add, update, remove }*/
+export { sanitizeAdministradorInput, findAll, findOne, add, update, remove }
