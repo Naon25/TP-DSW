@@ -34,7 +34,7 @@ Modelo)_
 Regularidad:
 |Req|Detalle|
 |:-|:-|
-|CRUD simple|1. CRUD Socio<br>2. CRUD Box<br>3. CRUD Amarra<br>4. CRUD TipoEmbarcacion|
+|CRUD simple|1. CRUD Socio<br>2. CRUD Administrador<br>3. CRUD Amarra<br>4. CRUD TipoEmbarcacion|
 |CRUD dependiente|1. CRUD Afiliacion {depende de} CRUD Tipo Socio<br>2. CRUD Embarcacion {depende de} CRUD Socio y CRUD TipoEmbarcacion|
 |Listado<br>+<br>detalle| 1. Listado de cuotas impagas filtrado por socio => detalle nombre del socio, mes, monto<br> 2. Listado de boxes y amarras filtrado por zona y estado => detalle muestra datos del box|
 |CUU/Epic|1. El administrador genera y registra el pago de una cuota.<br>2. Socio reserva un bote del club|
@@ -42,7 +42,7 @@ Regularidad:
 Adicionales para Aprobación
 |Req|Detalle|
 |:-|:-|
-|CRUD |1. CRUD ReservaTravelLift<br>2. CRUD ReservaBotesClub<br>|
+|CRUD |1. CRUD ReservaTravelLift<br>2. CRUD ReservaBotesClub<br>3. CRUD Box<br>|
 |CUU/Epic|1.La embarción cambia a una nueva Amarra.<br>3. El socio reserva el travel lift para una embarcación.|
 
 ### Alcance Adicional Voluntario
