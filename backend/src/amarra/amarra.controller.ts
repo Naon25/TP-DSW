@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
-import { AmarraRepository } from './amarra.repository.js'
 import { Amarra } from './amarra.entity.js'
 import { Estado } from './amarra.entity.js'
+import { AmarraRepository } from './amarra.respository.js';
 
-const repository = new AmarraRepository ()
+
+const repository = new AmarraRepository()
 
 function sanitizeAmarraInput(req: Request, res: Response, next: NextFunction) {
   const {estado, precioMensualBase, nroPilon, zona, longitudMax } = req.body;

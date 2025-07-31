@@ -40,10 +40,11 @@ async function add(req: Request, res: Response) {
   const input = req.body.sanitizedInput
 
   const socioInput = new Socio(
-    input.nombre, 
-    input.dni, 
-    input.email, 
-    input.telefono,
+    //input.nombre,
+    //input.dni,
+    //input.email, Hace lío a la hora de migrar a mikro-orm
+    //input.telefono
+
   )
 
   const socio = await repository.add(socioInput)
