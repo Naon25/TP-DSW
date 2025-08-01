@@ -1,4 +1,3 @@
-import crypto from 'node:crypto';
 import { Cascade, Collection, Entity, OneToMany, Property, } from '@mikro-orm/core';
 import { Embarcacion } from '../embarcacion/embarcacion.entity.js';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
