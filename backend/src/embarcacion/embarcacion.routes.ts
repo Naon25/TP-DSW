@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  sanitizeEmbarcacionInput,
   findAll,
   findOne,
   add,
@@ -11,6 +12,6 @@ export const embarcacionRouter = Router();
 
 embarcacionRouter.get('/', findAll);
 embarcacionRouter.get('/:id', findOne);
-embarcacionRouter.post('/', add);
-embarcacionRouter.put('/:id', update);
+embarcacionRouter.post('/', sanitizeEmbarcacionInput,add);
+embarcacionRouter.put('/:id',sanitizeEmbarcacionInput, update);
 embarcacionRouter.delete('/:id', remove);

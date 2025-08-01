@@ -9,6 +9,8 @@ function sanitizeEmbarcacionInput(req: Request, res: Response, next: NextFunctio
     nombre: req.body.nombre,
     matricula: req.body.matricula,
     eslora: req.body.eslora,
+    tipoEmbarcacion: req.body.tipoEmbarcacion,
+    socio: req.body.socio,
   }
   //mas validaciones si es necesario
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -29,7 +31,14 @@ async function findAll(req: Request, res: Response) {
 }
 
 async function findOne(req: Request, res: Response) {
-  res.status(501).send({ message: 'Not implemented' });
+  try {
+    const id = Number.parseInt(req.params.id);
+    const embarcacion = await em.findOneOrFail(Embarcacion, { id }, {populate: ['tipoEmbarcacion', 'socio'] });
+    res.status(200).json({message: 'found embarcacion', data: embarcacion});
+  } catch (error: any) {
+    res.status(500).send({ message: error.message });
+    
+  }
 }
 
 async function add(req: Request, res: Response) {
@@ -43,11 +52,26 @@ async function add(req: Request, res: Response) {
 }
 
 async function update(req: Request, res: Response) {
-  res.status(501).send({ message: 'Not implemented' });
+  try {
+    const id = Number.parseInt(req.params.id);
+    const embarcacionToUpdate = await em.findOneOrFail(Embarcacion, { id });
+    em.assign(embarcacionToUpdate, req.body.sanitizedInput);
+    em.flush();
+    res.status(200).json({message: 'Embarcacion updated', data: embarcacionToUpdate});
+  } catch (error: any) {
+    return res.status(500).send({ message: error.message });  
+  }
 }
 
 async function remove(req: Request, res: Response) {
-  res.status(501).send({ message: 'Not implemented' });
+  try {
+    const id = Number.parseInt(req.params.id);
+    const embarcacion = em.getReference(Embarcacion, id);
+    await em.removeAndFlush(embarcacion);
+    res.status(200).json({message: 'Embarcacion removed'});    
+  } catch (error: any) {
+    return res.status(500).send({ message: error.message });
+    }
 }
 
-export {  findAll, findOne, add, update, remove };
+export { sanitizeEmbarcacionInput, findAll, findOne, add, update, remove };

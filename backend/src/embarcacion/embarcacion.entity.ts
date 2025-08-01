@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property, ManyToOne, Cascade, Rel,  } from '@mikro-orm/core';
+import { Entity, Property, ManyToOne, Cascade, Rel,  } from '@mikro-orm/core';
 import { TipoEmbarcacion } from '../tipoEmbarcacion/tipoEmbarcacion.entity.js';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 import { Socio } from '../socio/socio.entity.js';
