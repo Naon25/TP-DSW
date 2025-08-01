@@ -2,13 +2,27 @@
 GET http://localhost:3000/api/tiposEmbarcacion
 
 
+### ID
+@id = {{createTipoEmbarcacion.response.body.data.id}}
 
-### obtener velero
-GET http://localhost:3000/api/tiposEmbarcacion/1
+### GET ONE
+GET http://localhost:3000/api/tiposEmbarcacion/{{id}}
 
 
 
-### Crear catamaran
+###POST TIPOEMBARCACION TO DELETE
+# @name createTipoEmbarcacionToDelete
+POST http://localhost:3000/api/tiposEmbarcacion
+Content-Type: application/json
+
+{
+  "nombre": "Lancha",
+  "esloraMaxima": 10
+}
+
+
+### POST
+# @name createTipoEmbarcacion
 POST http://localhost:3000/api/tiposEmbarcacion
 Content-Type: application/json
 
@@ -19,8 +33,8 @@ Content-Type: application/json
 
 
 
-### modificar a velero
-PUT http://localhost:3000/api/tiposEmbarcacion/1
+### PUT
+PUT http://localhost:3000/api/tiposEmbarcacion/{{id}}
 Content-Type: application/json
 
 {
@@ -28,15 +42,8 @@ Content-Type: application/json
   "esloraMaxima": 30
 }
 
-### modificar por patch
-PATCH http://localhost:3000/api/tiposEmbarcacion/1
-Content-Type: application/json
-
-{
-  "esloraMaxima": 25
-}
 
 
-
-### borrar a velero
-DELETE http://localhost:3000/api/tiposEmbarcacion/1
+### DELETE
+@idToDelete = {{createTipoEmbarcacionToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/tiposEmbarcacion/{{idToDelete}}

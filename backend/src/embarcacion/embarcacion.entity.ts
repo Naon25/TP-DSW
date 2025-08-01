@@ -1,7 +1,7 @@
-import { Entity, PrimaryKey, Property, ManyToOne, Cascade  } from '@mikro-orm/core';
-import type { tipoEmbarcacion } from '../tipoEmbarcacion/tipoEmbarcacion.entity.js';
+import { Entity, PrimaryKey, Property, ManyToOne, Cascade, Rel,  } from '@mikro-orm/core';
+import { TipoEmbarcacion } from '../tipoEmbarcacion/tipoEmbarcacion.entity.js';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
-import type { Socio } from '../socio/socio.entity.js';
+import { Socio } from '../socio/socio.entity.js';
 
 @Entity()
 export class Embarcacion extends BaseEntity {
@@ -15,10 +15,10 @@ export class Embarcacion extends BaseEntity {
   @Property({nullable: false})
   eslora!: number;
 
-  @ManyToOne(() => 'tipoEmbarcacion', { nullable: false})
-  tipoEmbarcacion!: tipoEmbarcacion;
+  @ManyToOne(() => TipoEmbarcacion, { nullable: false})
+  tipoEmbarcacion!: TipoEmbarcacion;
 
-  @ManyToOne(() => 'Socio', { nullable: false})
-  socio!: Socio;
+  @ManyToOne(() => Socio, { nullable: false})
+  socio!: Rel<Socio>;
  
 }

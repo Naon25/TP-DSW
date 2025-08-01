@@ -3,7 +3,7 @@ import { Cascade, Collection, Entity, OneToMany, Property, } from '@mikro-orm/co
 import { Embarcacion } from '../embarcacion/embarcacion.entity.js';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 @Entity()
-export class tipoEmbarcacion extends BaseEntity {
+export class TipoEmbarcacion extends BaseEntity {
 
   @Property({nullable: false, unique: true})
   nombre!: string;

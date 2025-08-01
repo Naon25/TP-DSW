@@ -1,0 +1,15 @@
+
+###FIND ALL
+GET http://localhost:3000/api/embarcaciones
+
+###POST a Embarcacion
+# @name CreateEmbarcacion
+POST http://localhost:3000/api/embarcaciones
+Content-Type: application/json
+
+{
+  "nombre": "Mancebo",
+  "eslora": 10,
+  "tipoEmbarcacion": 1,
+  "socio": 1
+}
