@@ -8,9 +8,15 @@ import { boxRouter } from './box/box.routes.js'
 import { amarraRouter } from './amarra/amarra.routes.js'
 import {orm, syncSchema} from './shared/orm.js'
 import { RequestContext } from '@mikro-orm/mysql'
+import cors from 'cors';
 
 const app = express()
+
+app.use(cors({
+  origin: 'http://localhost:5173', // Cambia esto al origen de tu frontend
+}));
 app.use(express.json())
+
 
 app.use((req, res, next) => {
   RequestContext.create(orm.em, next)
