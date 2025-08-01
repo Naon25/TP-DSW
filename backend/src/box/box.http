@@ -1,0 +1,47 @@
+### Obtener todos los boxes
+GET http://localhost:3000/api/boxes
+
+### Obtener un box por id
+GET http://localhost:3000/api/boxes/{{id}}
+
+
+###ID
+@id = {{createBox.response.body.data.id}}
+
+### POST
+# @name createBox
+POST http://localhost:3000/api/boxes
+Content-Type: application/json
+
+{
+  "estado": "disponible",
+  "precioMensualBase": 1500,
+  "nroBox": "B001"
+}
+
+### Actualizar un box existente
+PUT http://localhost:3000/api/boxes/{{id}}
+Content-Type: application/json
+
+{
+  "estado": "ocupado",
+  "precioMensualBase": 1800
+}
+
+
+
+### POST BOX TO DELETE
+# @name createBoxToDelete
+POST http://localhost:3000/api/boxes
+Content-Type: application/json
+
+{
+  "estado": "disponible",
+  "precioMensualBase": 1500,
+  "nroBox": "B002"
+}
+
+
+### Eliminar un box
+@idToDelete = {{createBoxToDelete.response.body.data.id}}
+DELETE http://localhost:3000/api/boxes/{{idToDelete}}

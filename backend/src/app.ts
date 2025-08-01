@@ -4,6 +4,8 @@ import { socioRouter } from './socio/socio.routes.js'
 import { tipoEmbarcacionRouter } from './tipoEmbarcacion/tipoEmbarcacion.routes.js'
 import { administradorRouter } from './administrador/administrador.routes.js'
 import { embarcacionRouter } from './embarcacion/embarcacion.routes.js'
+import { boxRouter } from './box/box.routes.js'
+import { amarraRouter } from './amarra/amarra.routes.js'
 import {orm, syncSchema} from './shared/orm.js'
 import { RequestContext } from '@mikro-orm/mysql'
 
@@ -17,7 +19,9 @@ app.use((req, res, next) => {
 app.use('/api/socios', socioRouter)
 app.use('/api/tiposEmbarcacion', tipoEmbarcacionRouter)
 app.use('/api/embarcaciones', embarcacionRouter) 
-app.use('/api/administrador', administradorRouter)
+app.use('/api/administradores', administradorRouter)
+app.use('/api/boxes', boxRouter)
+app.use('/api/amarras', amarraRouter)
 
 app.use((_, res) => {
   return res.status(404).send({ message: 'Resource not found' })
@@ -30,5 +34,3 @@ app.listen(3000, () => {
 })
 
 
-
-// 
