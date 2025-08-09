@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
-import { getSocios, crearSocio } from '../api/socios';
+import { getSocios, crearSocio } from '../api/socios.js';
+import { TablaSocios } from '../components/tablaSocios.jsx';
 
 export default function Socios() {
-  const [socios, setSocios] = useState([]); 
+  const [socios, setSocios] = useState([]);
   const [nombre, setNombre] = useState('');
   const [dni, setDni] = useState('');
   const [telefono, setTelefono] = useState('');
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    getSocios().then((res) =>{   
+    getSocios().then((res) => {
       console.log('Respuesta API socios:', res.data);
-      setSocios(res.data.data)});
+      setSocios(res.data.data);
+    });
   }, []);
 
   const handleCrear = async () => {
@@ -27,7 +29,7 @@ export default function Socios() {
   return (
     <div>
       <h2>SOCIOS</h2>
-
+      <h3>Crear Socios</h3>
       <input
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
@@ -53,11 +55,7 @@ export default function Socios() {
 
       <button onClick={handleCrear}>Crear</button>
 
-      <ul>
-        {socios.map((s) => (
-          <li key={s.id}>{s.nombre}{s.dni}{s.telefono}{s.email}</li>
-        ))}
-      </ul>
+      <TablaSocios users={socios} />
     </div>
   );
 }

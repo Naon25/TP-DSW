@@ -1,4 +1,4 @@
-import { AdminPanel } from './components/adminPanel.jsx';
+import { AdminPanel } from './pages/adminPanel.jsx';
 import React from 'react';
 function App() {
   return (
