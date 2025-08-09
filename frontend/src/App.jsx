@@ -1,10 +1,10 @@
-import Socios from './pages/Socios';
-
+import { AdminPanel } from './components/adminPanel.jsx';
+import React from 'react';
 function App() {
   return (
     <div>
-      <h1>Club Náutico</h1>
-      <Socios />
+      <h1>Club Náutico - Panel de Administración</h1>
+      <AdminPanel />
     </div>
   );
 }
