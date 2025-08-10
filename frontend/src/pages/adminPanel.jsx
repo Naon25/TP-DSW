@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Socios from './crearSocios.jsx';
 import { AdminNavbar } from '../components/AdminNavbar.jsx';
 import { CContainer } from '@coreui/react';
 import { MenuAdminSocios } from '../components/MenuAdminSocios.jsx';
+import AdministrarSocios from './AdministrarSocios.jsx';
 
 // importá otros componentes cuando los tengas
 
@@ -20,7 +20,7 @@ export function AdminPanel() {
         {pagina === 'socios' && (
           <MenuAdminSocios onSeleccion={handleSeleccion} />
         )}
-        {pagina === 'crearSocios' && <Socios />}
+        {pagina === 'administrarSocios' && <AdministrarSocios />}
         {pagina === 'embarcaciones' && (
           <div>Gestión de embarcaciones (próximamente)</div>
         )}

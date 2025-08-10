@@ -10,6 +10,9 @@ export class Socio {
   nombre!: string;
 
   @Property()
+  apellido!: string;
+
+  @Property()
   dni!: string;
 
   @Property()

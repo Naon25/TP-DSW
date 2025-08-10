@@ -7,16 +7,16 @@ export function MenuAdminSocios({ onSeleccion }) {
   return (
     <MenuPadre label="Menú de administración de Socios">
       <MenuButton
-        label="Crear Socios"
-        onClick={() => onSeleccion('crearSocios')}
+        label="Administrar Socios"
+        onClick={() => onSeleccion('administrarSocios')}
       />
       <MenuButton
-        label="Editar Socios"
-        onClick={() => onSeleccion('embarcaciones')}
+        label="Afiliaciones"
+        onClick={() => onSeleccion('administrarAfiliaciones')}
       />
       <MenuButton
-        label="Eliminar Socios"
-        onClick={() => onSeleccion('amarras')}
+        label="Cuotas y pagos"
+        onClick={() => onSeleccion('administrarCuotas')}
       />
     </MenuPadre>
   );
