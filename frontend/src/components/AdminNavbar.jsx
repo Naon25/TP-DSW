@@ -14,7 +14,7 @@ export function AdminNavbar({ onSeleccion, paginaActual }) {
   return (
     <CNavbar colorScheme="dark" className="bg-primary" expand="lg" fixed="top">
       <CContainer fluid>
-        <CNavbarBrand href="#">Club Náutico Admin</CNavbarBrand>
+        <CNavbarBrand onClick={() => onSeleccion(null)} style={{cursor: 'pointer'}}>Club Náutico Admin</CNavbarBrand>
         <CNavbarNav className="me-auto">
           <CNavItem>
             <CNavLink
