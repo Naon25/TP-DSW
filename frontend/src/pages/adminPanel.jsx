@@ -3,6 +3,7 @@ import { AdminNavbar } from '../components/AdminNavbar.jsx';
 import { CContainer } from '@coreui/react';
 import { MenuAdminSocios } from '../components/MenuAdminSocios.jsx';
 import AdministrarSocios from './AdministrarSocios.jsx';
+import AdminHome from '../components/AdminHome.jsx';
 
 // importá otros componentes cuando los tengas
 
@@ -16,6 +17,7 @@ export function AdminPanel() {
   return (
     <>
       <AdminNavbar onSeleccion={handleSeleccion} paginaActual={pagina} />
+      {!pagina && <AdminHome onSeleccion={handleSeleccion} />}
       <CContainer style={{ marginTop: '70px' }}>
         {pagina === 'socios' && (
           <MenuAdminSocios onSeleccion={handleSeleccion} />
@@ -25,7 +27,7 @@ export function AdminPanel() {
           <div>Gestión de embarcaciones (próximamente)</div>
         )}
         {pagina === 'amarras' && <div>Gestión de amarras (próximamente)</div>}
-        {!pagina && <p>Por favor, selecciona una funcionalidad.</p>}
+        
       </CContainer>
     </>
   );
