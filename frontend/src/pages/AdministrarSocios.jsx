@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getSocios, crearSocio, eliminarSocio, actualizarSocio } from '../api/socios.js';
 import { TablaSocios } from '../components/tablaSocios.jsx';
+import { EntityTable } from '../components/TablaGenerica.jsx';
 import {
   CCard,
   CCardHeader,
@@ -126,10 +127,19 @@ export default function AdministrarSocios() {
       </CCard>
 
       <div className="mt-4">
-        <TablaSocios
-          users={socios}
-          onEliminar={handleEliminar}
-          onEditar={handleEditar}
+        <EntityTable
+          entityName="socio"
+          columns={[
+            { key: 'id', label: 'ID' },
+            { key: 'nombre', label: 'Nombre' },
+            { key: 'apellido', label: 'Apellido' },
+            { key: 'dni', label: 'DNI' },
+            { key: 'email', label: 'E-Mail' },
+            { key: 'telefono', label: 'Teléfono' },
+          ]}
+          data={socios}
+          onDelete={handleEliminar}
+          onEdit={handleEditar}
         />
       </div>
     </div>

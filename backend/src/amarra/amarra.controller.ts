@@ -9,8 +9,8 @@ em.getRepository(Amarra)
 
 async function findAll(req: Request, res: Response) {
   try{
-    const amarra = await em.find(Amarra, {})
-    res.status(200).json({message:' finded all amarras', data: Amarra}) 
+    const amarras = await em.find(Amarra, {})
+    res.status(200).json({message:' finded all amarras', data: amarras}) 
   } catch (error: any){
     res.status(500).json ({message: error.message})
   }
