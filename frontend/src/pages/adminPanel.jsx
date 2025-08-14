@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { AdminNavbar } from '../components/AdminNavbar.jsx';
 import { CContainer } from '@coreui/react';
 import { MenuAdminSocios } from '../components/MenuAdminSocios.jsx';
+import { MenuAdminAmarras } from '../components/MenuAdminAmarras.jsx';
 import AdministrarSocios from './AdministrarSocios.jsx';
+import AdministrarAmarras from './AdministrarAmarras.jsx';
 import AdminHome from '../components/AdminHome.jsx';
 
 // importá otros componentes cuando los tengas
@@ -26,8 +28,8 @@ export function AdminPanel() {
         {pagina === 'embarcaciones' && (
           <div>Gestión de embarcaciones (próximamente)</div>
         )}
-        {pagina === 'amarras' && <div>Gestión de amarras (próximamente)</div>}
-        
+        {pagina === 'amarras' && <MenuAdminAmarras onSeleccion={handleSeleccion}/>}
+        {pagina === 'administrarAmarras' && <AdministrarAmarras/>}
       </CContainer>
     </>
   );
