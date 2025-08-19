@@ -1,0 +1,46 @@
+### FIND ALL
+GET http://localhost:3000/api/afiliaciones
+
+### CREATE Afiliacion
+# @name CreateAfiliacion
+POST http://localhost:3000/api/afiliaciones
+Content-Type: application/json
+
+{
+  "socio": 1,
+  "tipo": "TITULAR",
+  "fechaInicio": "2025-08-19T00:00:00.000Z",
+  "fechaFin": null
+}
+
+### ID
+@id = {{CreateAfiliacion.response.body.data.id}}
+
+### GET ONE
+GET http://localhost:3000/api/afiliaciones/{{id}}
+
+### UPDATE Afiliacion (ej: cambio de tipo o cierre con fechaFin)
+PUT http://localhost:3000/api/afiliaciones/{{id}}
+Content-Type: application/json
+
+{
+
+  "fechaFin": "2025-12-31T23:59:59.000Z"
+}
+
+### CREATE Afiliacion to delete
+# @name createAfiliacionToDelete
+POST http://localhost:3000/api/afiliaciones
+Content-Type: application/json
+
+{
+  "socio": 5,
+  "tipo": "TITULAR",
+  "fechaInicio": "2025-08-01T00:00:00.000Z",
+  "fechaFin": null
+}
+
+### DELETE
+@idToDelete = {{createAfiliacionToDelete.response.body.data.id}}
+
+DELETE http://localhost:3000/api/afiliaciones/{{idToDelete}}

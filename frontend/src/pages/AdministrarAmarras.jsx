@@ -163,6 +163,7 @@ export default function AdministrarAmarras(){
               onEdit={handleEditar}
               className="tabla-amarras"
             />
+            
           </>
         )}
         
