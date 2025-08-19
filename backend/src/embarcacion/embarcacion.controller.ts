@@ -23,7 +23,7 @@ function sanitizeEmbarcacionInput(req: Request, res: Response, next: NextFunctio
 
 async function findAll(req: Request, res: Response) {
   try{
-    const embarcaciones = await em.find(Embarcacion, {}, {populate: ['tipoEmbarcacion', 'socio'] });
+    const embarcaciones = await em.find(Embarcacion, {}, {populate: ['tipoEmbarcacion', 'socio'] }); 
     res.status(200).json({message: 'found all embarcaciones', data: embarcaciones});
   }catch (error:any) {
     res.status(500).send({ message: error.message });
