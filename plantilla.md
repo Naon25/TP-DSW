@@ -25,7 +25,8 @@ Modelo)_
 
 ### Modelo
 
-![imagen](https://github.com/user-attachments/assets/aef83463-fec4-496b-bbe2-2c7dad5ea02f)
+<img width="1328" height="613" alt="imagen" src="https://github.com/user-attachments/assets/d6499fc1-4a53-4b39-8d85-4fd0f414719c" />
+
 
 ## Alcance Funcional
 
