@@ -1,75 +1,79 @@
 //Lo comento porque me hace conflicto con mi crud con bd
 
-import { Request, Response, NextFunction } from 'express'
-import { SocioRepository } from './socio.repository.js'
-import { Socio } from './socio.entity.js'
+import { Request, Response, NextFunction } from 'express';
+import { Socio } from './socio.entity.js';
+import { orm } from '../shared/orm.js';
 
-const repository = new SocioRepository()
+const em = orm.em;
+em.getRepository(Socio);
 
-function sanitizeSocioInput(req: Request, res: Response, next: NextFunction) {
+/*function sanitizeSocioInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
     dni: req.body.dni,
     email: req.body.email,
     telefono: req.body.telefono,
-  }
+  };
   //more checks here
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
     if (req.body.sanitizedInput[key] === undefined) {
-      delete req.body.sanitizedInput[key]
+      delete req.body.sanitizedInput[key];
     }
-  })
-  next()
-}
+  });
+  next();
+}*/
 
 async function findAll(req: Request, res: Response) {
-  res.json({ data: await repository.findAll() })
+  try{
+      const socios = await em.find(Socio, {});
+      res.status(200).json({message: 'found all socios', data: socios});
+    }catch(error: any){
+      res.status(500).json({message: error.message});
+    }
 }
 
 async function findOne(req: Request, res: Response) {
-  const id = req.params.id
-  const socio = await repository.findOne({ id })
-  if (!socio) {
-    return res.status(404).send({ message: 'Socio not found' })
-  }
-  res.json({ data: socio })
+  try{
+      const id = Number.parseInt(req.params.id);
+      const socio = await em.findOneOrFail(Socio, { id });
+      res.status(200).json({message: 'found socio', data: socio});
+    }catch(error: any){
+      res.status(500).json({message: error.message});
+}
 }
 
 async function add(req: Request, res: Response) {
-  const input = req.body.sanitizedInput
-
-  const socioInput = new Socio(
-    input.nombre, 
-    input.dni, 
-    input.email, 
-    input.telefono,
-  )
-
-  const socio = await repository.add(socioInput)
-  return res.status(201).send({ message: 'Socio created', data: socio })
+   try{
+      const newSocio = em.create(Socio, req.body);
+      await em.flush();
+      res.status(201).json({message: 'Socio created', data: newSocio});
+    }catch(error: any){
+      res.status(500).json({message: error.message});
+    }
 }
 
 async function update(req: Request, res: Response) {
-  const socio = await repository.update(req.params.id, req.body.sanitizedInput)
-
-  if (!socio) {
-    return res.status(404).send({ message: 'Socio not found' })
-  }
-
-  return res.status(200).send({ message: 'Socio updated successfully', data: socio })
+  try{
+      const id = Number.parseInt(req.params.id);
+      const socioToUpdate =  em.getReference(Socio,  id );
+      em.assign(socioToUpdate, req.body);
+      await em.flush();
+      res.status(200).json({message: 'Socio updated'});  
+    }catch(error: any){
+      res.status(500).json({message: error.message});
+    }
 }
 
 async function remove(req: Request, res: Response) {
-  const id = req.params.id
-  const socio = await repository.delete({ id })
-
-  if (!socio) {
-    res.status(404).send({ message: 'Socio not found' })
-  } else {
-    res.status(200).send({ message: 'Socio deleted successfully' })
-  }
+  try{
+      const id = Number.parseInt(req.params.id);
+      const socioToRemove = em.getReference(Socio, id);
+      await em.removeAndFlush(socioToRemove);
+      res.status(200).json({message: 'Socio removed'});
+    }catch(error: any){
+      res.status(500).json({message: error.message});
+    }
 }
 
-export { sanitizeSocioInput, findAll, findOne, add, update, remove }
-
+export { findAll, findOne, add, update, remove };

@@ -1,0 +1,50 @@
+### obtener todas las amarras
+GET http://localhost:3000/api/amarras
+
+
+### ID
+@id = {{createAmarra.response.body.data.id}}
+
+###GET ONE
+GET http://localhost:3000/api/amarras/{{id}}
+
+### POST AMARRA TO DELETE
+# @name createAmarraToDelete
+POST http://localhost:3000/api/amarras
+Content-Type: application/json
+
+{
+  "estado": "libre",
+  "precioMensualBase": 4500,
+  "longitudMax": 10,
+  "zona": "B",
+  "nroPilon": 2
+}
+
+
+### POST
+# @name createAmarra
+POST http://localhost:3000/api/amarras
+Content-Type: application/json
+
+{
+  "estado": "libre",
+  "precioMensualBase": 5000,
+  "longitudMax": 12,
+  "zona": "A",
+  "nroPilon": 1
+}
+
+
+### PUT
+PUT http://localhost:3000/api/amarras/{{id}}
+Content-Type: application/json
+
+{
+  "estado": "ocupado",
+  "precioMensualBase": 5500
+}
+
+
+### DELETE
+@idToDelete =

@@ -1,0 +1,16 @@
+.table-container {
+  max-width: 1700px;
+  margin: 20px ;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.c-table-custom th,
+.c-table-custom td {
+  padding: 12px 15px;
+  font-size: 1rem;
+  border: 1px solid #dee2e6 !important;
+  /* Forzar bordes */
+}

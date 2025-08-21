@@ -1,68 +1,59 @@
-import { Request, Response, NextFunction } from "express";
-import { tipoEmbarcacionRepository } from "./tipoEmbarcacion.repository.js";
-import { tipoEmbarcacion } from "./tipoEmbarcacion.entity.js";
+import { Request, Response } from 'express';
+import { orm } from '../shared/orm.js';
+import { TipoEmbarcacion } from './tipoEmbarcacion.entity.js';
 
-const repository = new tipoEmbarcacionRepository
-
-function sanitizeTipoEmbarcacionInput(req: Request, res: Response, next: NextFunction) {
-  req.body.sanitizedInput = {
-    nombre: req.body.nombre,
-    esloraMaxima: req.body.esloraMaxima
-  }
-  //more checks here
-
-  Object.keys(req.body.sanitizedInput).forEach((key) => {
-    if (req.body.sanitizedInput[key] === undefined) {
-      delete req.body.sanitizedInput[key]
-    }
-  })
-  next()
-}
-
+const em = orm.em
+em.getRepository(TipoEmbarcacion)
 async function findAll(req: Request, res: Response) {
-  res.json({ data: await repository.findAll() })
+  try{
+    const tiposEmbarcacion = await em.find(TipoEmbarcacion, {});
+    res.status(200).json({message: 'found all tiposEmbarcacion', data: tiposEmbarcacion});
+  }catch(error: any){
+    res.status(500).json({message: error.message});
+  }
 }
 
 async function findOne(req: Request, res: Response) {
-  const id = req.params.id
-  const tipoEmb = await repository.findOne({ id })
-  if (!tipoEmb) {
-    return res.status(404).send({ message: 'tipoEmbarcacion not found' })
+  try{
+    const id = Number.parseInt(req.params.id);
+    const tipoEmbarcacionFound = await em.findOneOrFail(TipoEmbarcacion, { id });
+    res.status(200).json({message: 'found tipoEmbarcacion', data: tipoEmbarcacionFound});
+  }catch(error: any){
+    res.status(500).json({message: error.message});
   }
-  res.json({ data: tipoEmb })
 }
 
 async function add(req: Request, res: Response) {
-  const input = req.body.sanitizedInput
-
-  const tipoEmbarcacionInput = new tipoEmbarcacion(
-    input.nombre, 
-    input.esloraMaxima
-  )
-
-  const tipoEmb = await repository.add(tipoEmbarcacionInput)
-  return res.status(201).send({ message: 'TipoEmbarcacion created', data: tipoEmb })
+  try{
+    const newTipoEmbarcacion = em.create(TipoEmbarcacion, req.body);
+    await em.flush();
+    res.status(201).json({message: 'TipoEmbarcacion created', data: newTipoEmbarcacion});
+  }catch(error: any){
+    res.status(500).json({message: error.message});
+  }
 }
 
 async function update(req: Request, res: Response) {
-  const tipoEmb = await repository.update(req.params.id, req.body.sanitizedInput)
-
-  if (!tipoEmb) {
-    return res.status(404).send({ message: 'TipoEmbarcacion not found' })
+  try{
+    const id = Number.parseInt(req.params.id);
+    const tipoEmbarcacionToUpdate =  em.getReference(TipoEmbarcacion,  id );
+    em.assign(tipoEmbarcacionToUpdate, req.body);
+    await em.flush();
+    res.status(200).json({message: 'TipoEmbarcacion updated'});  
+  }catch(error: any){
+    res.status(500).json({message: error.message});
   }
-
-  return res.status(200).send({ message: 'TipoEmbarcacion updated successfully', data: tipoEmb })
 }
 
 async function remove(req: Request, res: Response) {
-  const id = req.params.id
-  const tipoEmb = await repository.delete({ id })
-
-  if (!tipoEmb) {
-    res.status(404).send({ message: 'TipoEmbarcacion not found' })
-  } else {
-    res.status(200).send({ message: 'TipoEmbarcacion deleted successfully' })
+  try{
+    const id = Number.parseInt(req.params.id);
+    const tipoEmbarcacionToRemove = em.getReference(TipoEmbarcacion, id);
+    await em.removeAndFlush(tipoEmbarcacionToRemove);
+    res.status(200).json({message: 'TipoEmbarcacion removed'});
+  }catch(error: any){
+    res.status(500).json({message: error.message});
   }
 }
 
-export { sanitizeTipoEmbarcacionInput, findAll, findOne, add, update, remove }
+export {  findAll, findOne, add, update, remove };
