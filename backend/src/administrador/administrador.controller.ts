@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express"
-import { AdministradorRepository } from "./administrador.repository.js"
 import { Administrador } from "./administrador.entity.js"
 
 const repository = new AdministradorRepository()
