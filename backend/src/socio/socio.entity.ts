@@ -1,6 +1,7 @@
 import { Entity, PrimaryKey, Property, OneToMany, Collection } from '@mikro-orm/core';
 import { Embarcacion } from '../embarcacion/embarcacion.entity.js';
 import { Afiliacion } from '../afiliacion/afiliacion.entity.js';
+import { CuotaMensual } from '../cuotaMensual/cuotaMensual.entity.js';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 @Entity()
 export class Socio extends BaseEntity {
@@ -24,4 +25,7 @@ export class Socio extends BaseEntity {
 
   @OneToMany(() => Afiliacion, (afiliacion) => afiliacion.socio)
   afiliaciones = new Collection<Afiliacion>(this); 
+
+  @OneToMany(() => CuotaMensual, (cuotaMensual) => cuotaMensual.socio)
+  cuotasMensuales = new Collection<Afiliacion>(this); 
 }

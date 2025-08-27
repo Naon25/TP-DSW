@@ -21,7 +21,7 @@ Content-Type: application/json
 ### GET ONE
 GET http://localhost:3000/api/cuotasMensuales/{{id}}
 
-### UPDATE Afiliacion (El socio paga su cuota)
+### UPDATE Cuota mensual (El socio paga su cuota)
 PUT http://localhost:3000/api/cuotasMensuales/{{id}}
 Content-Type: application/json
 
