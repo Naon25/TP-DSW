@@ -7,6 +7,7 @@ import { embarcacionRouter } from './embarcacion/embarcacion.routes.js'
 import { boxRouter } from './box/box.routes.js'
 import { amarraRouter } from './amarra/amarra.routes.js'
 import { afiliacionRouter } from './afiliacion/afiliacion.routes.js'
+import { cuotaMensualRouter } from './cuotaMensual/cuotaMensual.routes.js'
 import {orm, syncSchema} from './shared/orm.js'
 import { RequestContext } from '@mikro-orm/mysql'
 import cors from 'cors';
@@ -30,6 +31,7 @@ app.use('/api/administradores', administradorRouter)
 app.use('/api/boxes', boxRouter)
 app.use('/api/amarras', amarraRouter)
 app.use('/api/afiliaciones', afiliacionRouter)
+app.use('/api/cuotasMensuales', cuotaMensualRouter)
 
 app.use((_, res) => {
   return res.status(404).send({ message: 'Resource not found' })
