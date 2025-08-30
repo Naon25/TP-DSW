@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express"
 import { Administrador } from "./administrador.entity.js"
+import { orm } from "../shared/orm.js"
 
-const repository = new AdministradorRepository()
+const em = orm.em
 
-function sanitizeAdministradorInput(req: Request, res: Response, next: NextFunction) {
+/*function sanitizeAdministradorInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
     email: req.body.email,
@@ -17,53 +18,59 @@ function sanitizeAdministradorInput(req: Request, res: Response, next: NextFunct
     }
   })
   next()
-}
+}*/
 
 async function findAll(req: Request, res: Response) {
-  res.json({ data: await repository.findAll() })
+  try{
+    const administradores = await em.find(Administrador, {}); 
+    res.status(200).json({message: 'found all embarcaciones', data: administradores});
+  }catch (error:any) {
+    res.status(500).send({ message: error.message });
+  }
 }
 
 async function findOne(req: Request, res: Response) {
-  const id = req.params.id
-  const admin = await repository.findOne({ id })
-  if (!admin) {
-    return res.status(404).send({ message: 'Administrador not found' })
-  }
-  res.json({ data: admin })
+  try {
+      const id = Number.parseInt(req.params.id);
+      const administrador = await em.findOneOrFail(Administrador, { id });
+      res.status(200).json({message: 'found embarcacion', data: administrador});
+    } catch (error: any) {
+      res.status(500).send({ message: error.message });
+      
+    }
 }
 
 async function add(req: Request, res: Response) {
-  const input = req.body.sanitizedInput
-
-  const adminsitradorImput = new Administrador(
-    input.nombre, 
-    input.email
-  )
-
-  const admin = await repository.add(adminsitradorImput)
-  return res.status(201).send({ message: 'Administrador created', data: admin })
+  try{
+      const administrador = em.create(Administrador, req.body);
+      await em.flush();
+      res.status(201).json({message: 'Embarcacion created', data: administrador});
+    }catch (error:any) {
+      return res.status(500).send({ message: error.message });
+    }
 }
 
 async function update(req: Request, res: Response) {
-  req.body.sanitizedInput.id = req.params.id
-  const admin = await repository.update(req.params.id,req.body.sanitizedInput)
-
-  if (!admin) {
-    return res.status(404).send({ message: 'Administrador not found' })
-  }
-
-  return res.status(200).send({ message: 'Administrador updated successfully', data: admin })
+  try {
+      const id = Number.parseInt(req.params.id);
+      const administradorToUpdate = await em.findOneOrFail(Administrador, { id });
+      em.assign(administradorToUpdate, req.body.sanitizedInput);
+      em.flush();
+      res.status(200).json({message: 'Embarcacion updated', data: administradorToUpdate});
+    } catch (error: any) {
+      return res.status(500).send({ message: error.message });  
+    }
 }
 
 async function remove(req: Request, res: Response) {
-  const id = req.params.id
-  const admin = await repository.delete({ id })
-
-  if (!admin) {
-    res.status(404).send({ message: 'Administrador not found' })
-  } else {
-    res.status(200).send({ message: 'Administrador deleted successfully' })
-  }
+  try {
+      const id = Number.parseInt(req.params.id);
+      const administrador = em.getReference(Administrador, id);
+      await em.removeAndFlush(administrador);
+      res.status(200).json({message: 'Administrador removed'});    
+    } catch (error: any) {
+      return res.status(500).send({ message: error.message });
+      }
 }
 
-export { sanitizeAdministradorInput, findAll, findOne, add, update, remove }
+export { findAll, findOne, add, update, remove }

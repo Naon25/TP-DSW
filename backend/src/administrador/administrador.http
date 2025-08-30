@@ -2,6 +2,7 @@
 GET http://localhost:3000/api/administrador
 
 ### crear otro admin
+# @name createAdministrador
 POST http://localhost:3000/api/administrador
 Content-Type: application/json
 
