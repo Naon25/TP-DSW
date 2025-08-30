@@ -6,8 +6,7 @@ const em = orm.em;
 
 function sanitizeCuotaMensualInput(req: Request, res: Response, next: NextFunction){
   req.body.sanitizedInput ={
-    mes: req.body.mes,
-    anio: req.body.anio,
+    fechaVencimiento: req.body.fechaVencimiento,
     monto: req.body.monto,
     pagada: req.body.pagada,
     fechaPago: req.body.fechaPago,
