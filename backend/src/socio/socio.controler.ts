@@ -1,5 +1,3 @@
-//Lo comento porque me hace conflicto con mi crud con bd
-
 import { Request, Response, NextFunction } from 'express';
 import { Socio } from './socio.entity.js';
 import { orm } from '../shared/orm.js';
@@ -7,14 +5,14 @@ import { orm } from '../shared/orm.js';
 const em = orm.em;
 em.getRepository(Socio);
 
-/*function sanitizeSocioInput(req: Request, res: Response, next: NextFunction) {
+function sanitizeSocioInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
     dni: req.body.dni,
     email: req.body.email,
     telefono: req.body.telefono,
+    password: req.body.password,
   };
-  //more checks here
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {
     if (req.body.sanitizedInput[key] === undefined) {
@@ -22,7 +20,7 @@ em.getRepository(Socio);
     }
   });
   next();
-}*/
+}
 
 async function findAll(req: Request, res: Response) {
   try{
@@ -76,4 +74,4 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-export { findAll, findOne, add, update, remove };
+export { sanitizeSocioInput, findAll, findOne, add, update, remove };
