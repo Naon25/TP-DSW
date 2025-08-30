@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property, OneToMany, Collection } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, OneToMany, Collection, BeforeCreate } from '@mikro-orm/core';
 import { Embarcacion } from '../embarcacion/embarcacion.entity.js';
 import { Afiliacion } from '../afiliacion/afiliacion.entity.js';
 import { CuotaMensual } from '../cuotaMensual/cuotaMensual.entity.js';
@@ -20,6 +20,9 @@ export class Socio extends BaseEntity {
   @Property()
   telefono!: string;
 
+  @Property()
+  password!: string;
+  
   @OneToMany(() => Embarcacion, (embarcacion) => embarcacion.socio)
   embarcaciones = new Collection<Embarcacion>(this);
 
@@ -28,4 +31,11 @@ export class Socio extends BaseEntity {
 
   @OneToMany(() => CuotaMensual, (cuotaMensual) => cuotaMensual.socio)
   cuotasMensuales = new Collection<Afiliacion>(this); 
+
+  @BeforeCreate()
+  setPasswordFromDni() {
+    if (this.dni) {
+      this.password = this.dni.slice(-6); // últimos 6 dígitos del dni
+    }
+  }
 }

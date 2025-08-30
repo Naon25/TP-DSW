@@ -11,6 +11,7 @@ function sanitizeSocioInput(req: Request, res: Response, next: NextFunction) {
     dni: req.body.dni,
     email: req.body.email,
     telefono: req.body.telefono,
+    password: req.body.password,
   };
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {

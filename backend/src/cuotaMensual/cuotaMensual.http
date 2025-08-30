@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
   "socio": 1,
-  "fechaVencimiento": "2025-09-04",
+  "fechaVencimiento": "2025-10-04",
   "monto": 25000,
   "pagada": null,
   "fechaPago": null
@@ -47,3 +47,8 @@ Content-Type: application/json
 @idToDelete = {{createCuotaMensualToDelete.response.body.data.id}}
 
 DELETE http://localhost:3000/api/cuotasMensuales/{{idToDelete}}
+
+
+### Listado de cuotas mensuales impagas por socio
+@socioId = 1
+GET http://localhost:3000/api/cuotasMensuales/impagas/{{socioId}}

@@ -16,7 +16,7 @@ Content-Type: application/json
 {
   "nombre": "Juan",
   "apellido":"Perez",
-  "dni": "20.123.456",
+  "dni": "20123456",
   "email":"juan.perez@gmail.com",
   "telefono": "3412837598"
 }
@@ -28,10 +28,10 @@ POST http://localhost:3000/api/socios
 Content-Type: application/json
 
 {
-  "nombre": "Lionel",
-  "apellido":"Messi",
-  "dni": "33.016.244",
-  "email":"lio.messi@gmail.com",
+  "nombre": "Lamine",
+  "apellido":"Yamal",
+  "dni": "43842560",
+  "email":"lamine@gmail.com",
   "telefono": "3412837598"
 }
 
@@ -43,8 +43,8 @@ PUT http://localhost:3000/api/socios/{{id}}
 Content-Type: application/json
 
 {
-  "nombre": "Lionel Andres Messi Cuccittini",
-  "email":"lionel.messi@gmail.com"
+  "email":"lamine.yamal123@gmail.com",
+  "password":"Barcelona10"
 }
 
 
