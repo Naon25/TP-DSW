@@ -10,7 +10,7 @@ import { afiliacionRouter } from './afiliacion/afiliacion.routes.js'
 import { cuotaMensualRouter } from './cuotaMensual/cuotaMensual.routes.js'
 import {orm, syncSchema} from './shared/orm.js'
 import { RequestContext } from '@mikro-orm/mysql'
-import {cors} from 'cors'; 
+import cors from 'cors'; 
 
 const app = express()
 
