@@ -4,26 +4,25 @@ import { orm } from "../shared/orm.js"
 
 const em = orm.em
 
-/*function sanitizeAdministradorInput(req: Request, res: Response, next: NextFunction) {
+function sanitizeAdministradorInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
     email: req.body.email,
-    id: req.body.id
+    apellido: req.body.apellido,
+    password: req.body.password,
   }
-  //more checks here
-
   Object.keys(req.body.sanitizedInput).forEach((key) => {
     if (req.body.sanitizedInput[key] === undefined) {
       delete req.body.sanitizedInput[key]
     }
   })
   next()
-}*/
+}
 
 async function findAll(req: Request, res: Response) {
   try{
     const administradores = await em.find(Administrador, {}); 
-    res.status(200).json({message: 'found all embarcaciones', data: administradores});
+    res.status(200).json({message: 'found all administradores', data: administradores});
   }catch (error:any) {
     res.status(500).send({ message: error.message });
   }
@@ -42,9 +41,9 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try{
-      const administrador = em.create(Administrador, req.body);
+      const newAdministrador = em.create(Administrador, req.body);
       await em.flush();
-      res.status(201).json({message: 'Embarcacion created', data: administrador});
+      res.status(201).json({message: 'Administrador created', data: newAdministrador});
     }catch (error:any) {
       return res.status(500).send({ message: error.message });
     }
@@ -53,14 +52,25 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
       const id = Number.parseInt(req.params.id);
-      const administradorToUpdate = await em.findOneOrFail(Administrador, { id });
-      em.assign(administradorToUpdate, req.body.sanitizedInput);
-      em.flush();
-      res.status(200).json({message: 'Embarcacion updated', data: administradorToUpdate});
+      const administradorToUpdate = em.getReference(Administrador,  id );
+      em.assign(administradorToUpdate, req.body);
+      await em.flush();
+      res.status(200).json({message: 'Administrador updated'});
     } catch (error: any) {
       return res.status(500).send({ message: error.message });  
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 async function remove(req: Request, res: Response) {
   try {
@@ -73,4 +83,4 @@ async function remove(req: Request, res: Response) {
       }
 }
 
-export { findAll, findOne, add, update, remove }
+export {sanitizeAdministradorInput, findAll, findOne, add, update, remove }

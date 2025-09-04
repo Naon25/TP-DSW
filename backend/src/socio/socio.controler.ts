@@ -9,6 +9,7 @@ function sanitizeSocioInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
     dni: req.body.dni,
+    apellido: req.body.apellido,
     email: req.body.email,
     telefono: req.body.telefono,
     password: req.body.password,

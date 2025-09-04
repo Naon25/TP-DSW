@@ -1,4 +1,3 @@
-/* Lo comento porque me hace conflicto con mi crud con bd*/
 import { Router } from 'express'
 import { findAll, findOne, add, update, remove } from './socio.controler.js'
 
