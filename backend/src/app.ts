@@ -10,6 +10,8 @@ import { afiliacionRouter } from './afiliacion/afiliacion.routes.js'
 import { cuotaMensualRouter } from './cuotaMensual/cuotaMensual.routes.js'
 import {orm, syncSchema} from './shared/orm.js'
 import { RequestContext } from '@mikro-orm/mysql'
+import { authRouter } from './auth/auth.routes.js'
+
 import cors from 'cors'; 
 
 const app = express()
@@ -32,6 +34,9 @@ app.use('/api/boxes', boxRouter)
 app.use('/api/amarras', amarraRouter)
 app.use('/api/afiliaciones', afiliacionRouter)
 app.use('/api/cuotasMensuales', cuotaMensualRouter)
+app.use('/api', authRouter)
+
+
 
 app.use((_, res) => {
   return res.status(404).send({ message: 'Resource not found' })

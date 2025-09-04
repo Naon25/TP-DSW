@@ -43,14 +43,15 @@ async function findOne(req: Request, res: Response) {
 }
 
 async function add(req: Request, res: Response) {
-   try{
-      const newSocio = em.create(Socio, req.body);
-      await em.flush();
-      res.status(201).json({message: 'Socio created', data: newSocio});
-    }catch(error: any){
-      res.status(500).json({message: error.message});
-    }
+  try {
+    const newSocio = em.create(Socio, req.body)
+    await em.persistAndFlush(newSocio)
+    res.status(201).json({ message: 'Socio created', data: newSocio })
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
 }
+
 
 async function update(req: Request, res: Response) {
   try{

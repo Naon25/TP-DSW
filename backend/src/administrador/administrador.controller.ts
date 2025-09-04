@@ -7,8 +7,9 @@ const em = orm.em
 function sanitizeAdministradorInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
-    email: req.body.email,
     apellido: req.body.apellido,
+    email: req.body.email,
+    dni: req.body.dni,
     password: req.body.password,
   }
   Object.keys(req.body.sanitizedInput).forEach((key) => {

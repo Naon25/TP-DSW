@@ -1,8 +1,9 @@
-import { Entity, PrimaryKey, Property, OneToMany, Collection, BeforeCreate } from '@mikro-orm/core';
+import { Entity, Property, OneToMany, Collection, BeforeCreate } from '@mikro-orm/core';
 import { Embarcacion } from '../embarcacion/embarcacion.entity.js';
 import { Afiliacion } from '../afiliacion/afiliacion.entity.js';
 import { CuotaMensual } from '../cuotaMensual/cuotaMensual.entity.js';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
+import bcrypt from 'bcrypt';
 @Entity()
 export class Socio extends BaseEntity {
   @Property()
@@ -33,9 +34,10 @@ export class Socio extends BaseEntity {
   cuotasMensuales = new Collection<Afiliacion>(this); 
 
   @BeforeCreate()
-  setPasswordFromDni() {
-    if (this.dni) {
-      this.password = this.dni.slice(-6); // últimos 6 dígitos del dni
-    }
+    async hashPassword() {
+  if (this.dni) {
+    const rawPassword = this.dni.slice(-6)
+    this.password = await bcrypt.hash(rawPassword, 10)
   }
+}
 }

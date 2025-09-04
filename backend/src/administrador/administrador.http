@@ -7,10 +7,10 @@ POST http://localhost:3000/api/administradores
 Content-Type: application/json
 
 {
-  "nombre": "Teo",
-  "apellido": "De Elia",
-  "email":"teo12@gmail.com",
-  "password":"@Mess1"
+  "nombre": "Diego",
+  "apellido": "Lopez",
+  "dni": "43222222",
+  "email":"diego.lopez@gmail.com"
 }
 
 ### ID
@@ -24,8 +24,7 @@ PUT http://localhost:3000/api/administradores/{{id}}
 Content-Type: application/json
 
 {
-  "nombre": "Teofilo",
-  "password":"edlp412" 
+  "nombre": "Diego Armando"
 }
 
 
