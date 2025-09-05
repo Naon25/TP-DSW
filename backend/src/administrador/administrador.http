@@ -28,5 +28,5 @@ Content-Type: application/json
 }
 
 
-### borrar a administrador 1
+### borrar a administrador
 DELETE http://localhost:3000/api/administradores/{{id}}

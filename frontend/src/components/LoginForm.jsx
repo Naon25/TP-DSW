@@ -1,15 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  CCard,
-  CCardHeader,
-  CCardBody,
-  CRow,
-  CCol,
-  CForm,
-  CFormInput,
-  CButton,
-} from '@coreui/react';
+import {CCard,CCardHeader,CCardBody,CRow,CCol,CForm,CFormInput,CButton,} from '@coreui/react';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');

@@ -1,5 +1,5 @@
-/*import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { AdminPanel } from './pages/adminPanel';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { AdminPanel } from './pages/adminPanel.jsx';
 import Login from "./pages/Login";
 
 
@@ -14,16 +14,3 @@ export default function App() {
     </BrowserRouter>
   )
 }
-*/
-import { AdminPanel } from './pages/adminPanel.jsx';
-import React from 'react';
-import './App.css'
-function App() {
-  return (
-    <div>
-      <AdminPanel />
-    </div>
-  );
-}
-
-export default App;
