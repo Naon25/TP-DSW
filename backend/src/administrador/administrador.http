@@ -24,7 +24,8 @@ PUT http://localhost:3000/api/administradores/{{id}}
 Content-Type: application/json
 
 {
-  "nombre": "Diego Armando"
+  "nombre": "Diego Armando",
+  "password": "123456789"
 }
 
 

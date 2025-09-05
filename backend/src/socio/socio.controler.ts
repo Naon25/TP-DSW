@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { Socio } from './socio.entity.js';
 import { orm } from '../shared/orm.js';
+import bcrypt from 'bcrypt';
 
 const em = orm.em;
 em.getRepository(Socio);
@@ -54,16 +55,26 @@ async function add(req: Request, res: Response) {
 
 
 async function update(req: Request, res: Response) {
-  try{
-      const id = Number.parseInt(req.params.id);
-      const socioToUpdate =  em.getReference(Socio,  id );
-      em.assign(socioToUpdate, req.body);
-      await em.flush();
-      res.status(200).json({message: 'Socio updated'});  
-    }catch(error: any){
-      res.status(500).json({message: error.message});
+  try {
+    const id = Number.parseInt(req.params.id);
+    const socioToUpdate = em.getReference(Socio, id);
+
+    const updatedData = { ...req.body };
+
+    if (updatedData.password) {
+      const saltRounds = 10;
+      updatedData.password = await bcrypt.hash(updatedData.password, saltRounds);
     }
+
+    em.assign(socioToUpdate, updatedData);
+    await em.flush();
+
+    res.status(200).json({ message: 'Socio updated' });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 }
+
 
 async function remove(req: Request, res: Response) {
   try{

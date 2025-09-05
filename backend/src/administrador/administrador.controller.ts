@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import { Administrador } from "./administrador.entity.js"
 import { orm } from "../shared/orm.js"
+import bcrypt from "bcrypt";
 
 const em = orm.em
 
@@ -52,20 +53,24 @@ async function add(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
   try {
-      const id = Number.parseInt(req.params.id);
-      const administradorToUpdate = em.getReference(Administrador,  id );
-      em.assign(administradorToUpdate, req.body);
-      await em.flush();
-      res.status(200).json({message: 'Administrador updated'});
-    } catch (error: any) {
-      return res.status(500).send({ message: error.message });  
+    const id = Number.parseInt(req.params.id);
+    const administradorToUpdate = em.getReference(Administrador, id);
+
+    const updatedData = { ...req.body };
+
+    if (updatedData.password) {
+      const saltRounds = 10;
+      updatedData.password = await bcrypt.hash(updatedData.password, saltRounds);
     }
+
+    em.assign(administradorToUpdate, updatedData);
+    await em.flush();
+
+    res.status(200).json({ message: "Administrador updated" });
+  } catch (error: any) {
+    return res.status(500).send({ message: error.message });
+  }
 }
-
-
-
-
-
 
 
 
