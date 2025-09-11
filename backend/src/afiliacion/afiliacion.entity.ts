@@ -15,7 +15,7 @@ export class Afiliacion extends BaseEntity {
   fechaInicio!: Date;
 
   @Property({nullable: true}) // Cuando es null significa que la afiliacion esta activa
-  fechaFin!: Date;
+  fechaFin?: Date;
 
   @Property({nullable: false})
   tipo!: string;

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Socio } from './socio.entity.js';
 import { orm } from '../shared/orm.js';
 import bcrypt from 'bcrypt';
+import { Afiliacion } from '../afiliacion/afiliacion.entity.js';
 
 const em = orm.em;
 em.getRepository(Socio);
@@ -45,14 +46,29 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const newSocio = em.create(Socio, req.body)
-    await em.persistAndFlush(newSocio)
-    res.status(201).json({ message: 'Socio created', data: newSocio })
+    // Crear socio
+    const newSocio = em.create(Socio, req.body);
+    await em.persistAndFlush(newSocio);
+
+    // Crear afiliación asociada
+    if (req.body.tipoAfiliacion) {
+      const afiliacion = em.create(Afiliacion, {
+        fechaInicio: new Date(),
+        tipo: req.body.tipoAfiliacion,
+        socio: newSocio,
+        fechaFin: null,
+      });
+      await em.persistAndFlush(afiliacion);
+    }
+
+    res.status(201).json({ 
+      message: 'Socio y afiliación creados', 
+      data: newSocio 
+    });
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
 }
-
 
 async function update(req: Request, res: Response) {
   try {
