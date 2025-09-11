@@ -12,6 +12,7 @@ import {
   CFormInput,
   CButton,
 } from '@coreui/react';
+import { crearAfiliacion } from '../api/afiliaciones.js';
 
 export default function AdministrarSocios() {
   const [socios, setSocios] = useState([]);
@@ -20,6 +21,8 @@ export default function AdministrarSocios() {
   const [dni, setDni] = useState('');
   const [telefono, setTelefono] = useState('');
   const [email, setEmail] = useState('');
+
+  const [tipoAfiliacion, setTipoAfiliacion] = useState('');
 
   useEffect(() => {
     cargarSocios();
@@ -30,16 +33,25 @@ export default function AdministrarSocios() {
     setSocios(res.data.data);
   };
 
-  const handleCrear = async (e) => {
-    e.preventDefault();
-    await crearSocio({ nombre, apellido, dni, telefono, email });
-    await cargarSocios();
-    setNombre('');
-    setApellido('');
-    setDni('');
-    setTelefono('');
-    setEmail('');
-  };
+ const handleCrear = async (e) => {
+  e.preventDefault();
+  const socioResp = await crearSocio({ nombre, apellido, dni, telefono, email });
+  const socioId = socioResp.data.data.id;
+
+  await crearAfiliacion({
+    fechaInicio: new Date(),
+    tipo: tipoAfiliacion,
+    socio: socioId,
+  });
+
+  await cargarSocios();
+  setNombre('');
+  setApellido('');
+  setDni('');
+  setTelefono('');
+  setEmail('');
+  setTipoAfiliacion('');
+};
 
   const handleEliminar = async (id) => {
     try {
@@ -116,6 +128,15 @@ export default function AdministrarSocios() {
                   placeholder="Ingrese un email válido"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                />
+              </CCol>
+              <CCol md={3}>
+                <CFormInput
+                  label="Tipo de Afiliación"
+                  placeholder="Ej: Titular / Adherente"
+                  value={tipoAfiliacion}
+                  onChange={(e) => setTipoAfiliacion(e.target.value)}
+                  required
                 />
               </CCol>
             </CRow>

@@ -18,6 +18,10 @@ export const AdministrarCuotas = () => {
   const [errorSocios, setErrorSocios] = useState(false)
   const [loadingSocios, setLoadingSocios] = useState(true)
 
+  const [cuotaEditando, setCuotaEditando] = useState(null)
+  const [modalVisible, setModalVisible] = useState(false)
+  const [formPago, setFormPago] = useState({ pagada: false, fechaPago: '' })
+
   useEffect(() => {
     const fetchSocios = async () => {
       try {
@@ -61,20 +65,35 @@ export const AdministrarCuotas = () => {
     }
   }
 
-  const marcarComoPagada = async (cuotaId, socioId) => {
+  const abrirModalEdicion = (cuota, socioId) => {
+    setCuotaEditando({ ...cuota, socioId })
+    setFormPago({
+      pagada: cuota.pagada,
+      fechaPago: cuota.fechaPago ? cuota.fechaPago.slice(0, 10) : '',
+    })
+    setModalVisible(true)
+  }
+
+  const guardarEdicionCuota = async () => {
     try {
-      await actualizarCuota(cuotaId, {
-        pagada: true,
-        fechaPago: new Date().toISOString(),
+      await actualizarCuota(cuotaEditando.id, {
+        pagada: formPago.pagada,
+        fechaPago: formPago.pagada ? new Date(formPago.fechaPago).toISOString() : null,
       })
+
       setCuotasPorSocio((prev) => {
-        const actualizadas = prev[socioId].map((cuota) =>
-          cuota.id === cuotaId ? { ...cuota, pagada: true } : cuota
+        const actualizadas = prev[cuotaEditando.socioId].map((cuota) =>
+          cuota.id === cuotaEditando.id
+            ? { ...cuota, pagada: formPago.pagada, fechaPago: formPago.fechaPago }
+            : cuota
         )
-        return { ...prev, [socioId]: actualizadas }
+        return { ...prev, [cuotaEditando.socioId]: actualizadas }
       })
+
+      setModalVisible(false)
+      setCuotaEditando(null)
     } catch (error) {
-      console.error(`Error al marcar cuota ${cuotaId} como pagada:`, error)
+      console.error('Error al actualizar cuota:', error)
     }
   }
 
@@ -173,9 +192,10 @@ export const AdministrarCuotas = () => {
                     <table className="table table-sm table-bordered align-middle mb-0">
                       <thead className="table-light">
                         <tr>
-                          <th style={{ width: '30%' }}>Vencimiento</th>
-                          <th style={{ width: '30%' }}>Monto</th>
-                          <th style={{ width: '40%' }}>Estado</th>
+                          <th style={{ width: '25%' }}>Vencimiento</th>
+                          <th style={{ width: '25%' }}>Monto</th>
+                          <th style={{ width: '25%' }}>Estado</th>
+                          <th style={{ width: '25%' }}>Fecha de pago</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -184,24 +204,26 @@ export const AdministrarCuotas = () => {
                             <td>{new Date(cuota.fechaVencimiento).toLocaleDateString()}</td>
                             <td>${cuota.monto}</td>
                             <td>
-                              <div className="d-flex justify-content-between align-items-center">
-                                <span className={`fw-bold ${cuota.pagada ? 'text-success' : 'text-danger'}`}>
-                                  {cuota.pagada ? '✅ Pagada' : '❌ Impaga'}
-                                </span>
-                                {!cuota.pagada && (
-                                  <CButton
-                                    size="sm"
-                                    style={{
-                                      backgroundColor: '#81c784',
-                                      color: '#1b5e20',
-                                      border: '1px solid #66bb6a',
-                                    }}
-                                    onClick={() => marcarComoPagada(cuota.id, item.id)}
-                                  >
-                                    Marcar
-                                  </CButton>
-                                )}
-                              </div>
+                              <span className={`fw-bold ${cuota.pagada ? 'text-success' : 'text-danger'}`}>
+                                {cuota.pagada ? '✅ Pagada' : '❌ Impaga'}
+                              </span>
+                            </td>
+                            <td>
+                              {cuota.pagada && cuota.fechaPago
+                                ? new Date(cuota.fechaPago).toLocaleDateString()
+                                : '-'}
+                              <CButton
+                                size="sm"
+                                className="ms-2"
+                                style={{
+                                  backgroundColor: '#fff176',
+                                  color: '#f57f17',
+                                  border: '1px solid #fbc02d',
+                                }}
+                                onClick={() => abrirModalEdicion(cuota, item.id)}
+                              >
+                                Editar
+                              </CButton>
                             </td>
                           </tr>
                         ))}
@@ -223,6 +245,76 @@ export const AdministrarCuotas = () => {
           className: 'align-middle',
         }}
       />
+      {modalVisible && (
+      <div
+        className="position-fixed top-0 start-0 w-100 h-100"
+        style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+          zIndex: 1050,
+        }}
+      >
+        <div className="modal d-block h-100 d-flex align-items-center justify-content-center">
+          <div className="modal-dialog">
+            <div
+              className="modal-content"
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: '8px',
+                boxShadow: '0 0 20px rgba(0,0,0,0.3)',
+              }}
+            >
+              <div className="modal-header">
+                <h5 className="modal-title">Editar cuota</h5>
+                <button type="button" className="btn-close" onClick={() => setModalVisible(false)}></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label">¿Está pagada?</label>
+                  <select
+                    className="form-select"
+                    value={formPago.pagada ? 'sí' : 'no'}
+                    onChange={(e) =>
+                      setFormPago((prev) => ({
+                        ...prev,
+                        pagada: e.target.value === 'sí',
+                      }))
+                    }
+                  >
+                    <option value="no">No</option>
+                    <option value="sí">Sí</option>
+                  </select>
+                </div>
+                {formPago.pagada && (
+                  <div className="mb-3">
+                    <label className="form-label">Fecha de pago</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      value={formPago.fechaPago}
+                      onChange={(e) =>
+                        setFormPago((prev) => ({
+                          ...prev,
+                          fechaPago: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer">
+                <CButton color="secondary" onClick={() => setModalVisible(false)}>
+                  Cancelar
+                </CButton>
+                <CButton color="primary" onClick={guardarEdicionCuota}>
+                  Guardar
+                </CButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
     </CCard>
   )
 }

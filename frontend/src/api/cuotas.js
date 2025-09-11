@@ -5,7 +5,10 @@ const api = axios.create({
 });
 
 export const getCuotas= () => api.get('./api/cuotasMensuales');
-export const crearCuota = (data) => api.post('./api/cuotasMensuales', data);
+export const crearCuota = async (data) => {
+  const resp = await api.post('/api/cuotasMensuales', data)
+  return resp.data
+}
 export const eliminarCuota = (id) => api.delete(`./api/cuotasMensuales/${id}`);
 export const actualizarCuota = (id, data) => api.put(`./api/cuotasMensuales/${id}`, data);
 export const getCuotasImpagasPorSocio = (idSocio) =>
