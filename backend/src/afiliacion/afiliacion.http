@@ -7,7 +7,7 @@ POST http://localhost:3000/api/afiliaciones
 Content-Type: application/json
 
 {
-  "socio": 1,
+  "socio": 17,
   "tipo": "TITULAR",
   "fechaInicio": "2025-08-19T00:00:00.000Z",
   "fechaFin": null
@@ -20,7 +20,7 @@ Content-Type: application/json
 GET http://localhost:3000/api/afiliaciones/{{id}}
 
 ### UPDATE Afiliacion (ej: cambio de tipo o cierre con fechaFin)
-PUT http://localhost:3000/api/afiliaciones/{{id}}
+PUT http://localhost:3000/api/afiliaciones/2
 Content-Type: application/json
 
 {

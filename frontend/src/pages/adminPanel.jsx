@@ -7,7 +7,7 @@ import AdministrarSocios from './AdministrarSocios.jsx';
 import AdministrarAmarras from './AdministrarAmarras.jsx';
 import AdminHome from '../components/AdminHome.jsx';
 import { AdministrarCuotas } from './AdministrarCuotas.jsx'
-// importá otros componentes cuando los tengas
+import { AdministrarAfiliaciones} from './AdministrarAfiliaciones.jsx'
 
 export function AdminPanel() {
   const [pagina, setPagina] = useState(null);
@@ -26,6 +26,7 @@ export function AdminPanel() {
         )}
         {pagina === 'administrarSocios' && <AdministrarSocios />}
         {pagina === 'administrarCuotas' && <AdministrarCuotas/>}
+        {pagina === 'administrarAfiliaciones' && <AdministrarAfiliaciones/>}
         {pagina === 'embarcaciones' && (
           <div>Gestión de embarcaciones (próximamente)</div>
         )}

@@ -5,9 +5,15 @@ import {
   CSmartTable,
   CCard,
   CSpinner,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
+  CFormInput,
 } from '@coreui/react-pro'
 import { getSocios } from '../api/socios.js'
-import { getCuotas, actualizarCuota } from '../api/cuotas.js'
+import { getCuotas, actualizarCuota, crearCuota } from '../api/cuotas.js'
 
 export const AdministrarCuotas = () => {
   const [details, setDetails] = useState([])
@@ -19,8 +25,12 @@ export const AdministrarCuotas = () => {
   const [loadingSocios, setLoadingSocios] = useState(true)
 
   const [cuotaEditando, setCuotaEditando] = useState(null)
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalEditarVisible, setModalEditarVisible] = useState(false)
   const [formPago, setFormPago] = useState({ pagada: false, fechaPago: '' })
+
+  const [modalNuevaVisible, setModalNuevaVisible] = useState(false)
+  const [formNuevaCuota, setFormNuevaCuota] = useState({ monto: '' })
+  const [socioSeleccionado, setSocioSeleccionado] = useState(null)
 
   useEffect(() => {
     const fetchSocios = async () => {
@@ -40,7 +50,6 @@ export const AdministrarCuotas = () => {
         setLoadingSocios(false)
       }
     }
-
     fetchSocios()
   }, [])
 
@@ -71,7 +80,7 @@ export const AdministrarCuotas = () => {
       pagada: cuota.pagada,
       fechaPago: cuota.fechaPago ? cuota.fechaPago.slice(0, 10) : '',
     })
-    setModalVisible(true)
+    setModalEditarVisible(true)
   }
 
   const guardarEdicionCuota = async () => {
@@ -82,39 +91,53 @@ export const AdministrarCuotas = () => {
       })
 
       setCuotasPorSocio((prev) => {
-        const actualizadas = prev[cuotaEditando.socioId].map((cuota) =>
-          cuota.id === cuotaEditando.id
-            ? { ...cuota, pagada: formPago.pagada, fechaPago: formPago.fechaPago }
-            : cuota
+        const actualizadas = prev[cuotaEditando.socioId].map((c) =>
+          c.id === cuotaEditando.id
+            ? { ...c, pagada: formPago.pagada, fechaPago: formPago.fechaPago }
+            : c
         )
         return { ...prev, [cuotaEditando.socioId]: actualizadas }
       })
 
-      setModalVisible(false)
+      setModalEditarVisible(false)
       setCuotaEditando(null)
     } catch (error) {
       console.error('Error al actualizar cuota:', error)
     }
   }
 
-  const toggleFiltroImpagas = (id) => {
-    setMostrarSoloImpagas((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }))
+  const abrirModalNuevaCuota = (socio) => {
+    setSocioSeleccionado(socio)
+    setFormNuevaCuota({ monto: '' })
+    setModalNuevaVisible(true)
   }
 
-  const columns = [
-    { key: 'id', label: 'ID', _style: { width: '10%' }, sorter: true },
-    {
-      key: 'nombreCompleto',
-      label: 'Nombre completo',
-      _style: { width: '80%' },
-      sorter: true,
-      filter: false,
-    },
-    { key: 'show_details', label: '', _style: { width: '1%' }, filter: false, sorter: false },
-  ]
+  const guardarNuevaCuota = async () => {
+    if (!socioSeleccionado) return
+    try {
+      const fechaVencimiento = new Date()
+      fechaVencimiento.setMonth(fechaVencimiento.getMonth() + 1)
+
+      const nueva = await crearCuota({
+        socio: { id: socioSeleccionado.id },
+        monto: Number(formNuevaCuota.monto),
+        fechaVencimiento: fechaVencimiento.toISOString(),
+        pagada: false,
+      })
+
+      setCuotasPorSocio((prev) => ({
+        ...prev,
+        [socioSeleccionado.id]: [...(prev[socioSeleccionado.id] || []), nueva],
+      }))
+      setModalNuevaVisible(false)
+    } catch (error) {
+      console.error('Error al crear nueva cuota:', error)
+    }
+  }
+
+  const toggleFiltroImpagas = (id) => {
+    setMostrarSoloImpagas((prev) => ({ ...prev, [id]: !prev[id] }))
+  }
 
   if (errorSocios) {
     return (
@@ -133,13 +156,16 @@ export const AdministrarCuotas = () => {
     )
   }
 
-  const sociosConNombreCompleto = socios.map((s) => ({
-    ...s,
-    nombreCompleto: `${s.nombre} ${s.apellido}`,
-  }))
+  const sociosConNombreCompleto = socios.map((s) => ({ ...s, nombreCompleto: `${s.nombre} ${s.apellido}` }))
+
+  const columns = [
+    { key: 'id', label: 'ID', _style: { width: '10%' }, sorter: true },
+    { key: 'nombreCompleto', label: 'Nombre completo', _style: { width: '70%' }, sorter: true },
+    { key: 'acciones', label: '', _style: { width: '20%' }, filter: false, sorter: false },
+  ]
 
   return (
-    <CCard className="rounded shadow-sm p-3 mx-auto" style={{ maxWidth: '800px' }}>
+    <CCard className="rounded shadow-sm p-3 mx-auto" style={{ maxWidth: '900px' }}>
       <CSmartTable
         columns={columns}
         items={sociosConNombreCompleto}
@@ -149,16 +175,19 @@ export const AdministrarCuotas = () => {
         sorter
         scopedColumns={{
           nombreCompleto: (item) => <td>{item.nombreCompleto}</td>,
-          show_details: (item) => (
+          acciones: (item) => (
             <td className="py-2">
               <CButton
+                size="sm"
                 color="primary"
                 variant="outline"
-                shape="square"
-                size="sm"
+                className="me-2"
                 onClick={() => toggleDetails(item.id)}
               >
                 {details.includes(item.id) ? 'Ocultar' : 'Ver'}
+              </CButton>
+              <CButton size="sm" color="success" onClick={() => abrirModalNuevaCuota(item)}>
+                Nueva cuota
               </CButton>
             </td>
           ),
@@ -166,21 +195,14 @@ export const AdministrarCuotas = () => {
             const cuotas = cuotasPorSocio[item.id] || []
             const loading = loadingCuotas[item.id]
             const soloImpagas = mostrarSoloImpagas[item.id]
-            const cuotasFiltradas = soloImpagas
-              ? cuotas.filter((c) => !c.pagada)
-              : cuotas
+            const cuotasFiltradas = soloImpagas ? cuotas.filter((c) => !c.pagada) : cuotas
 
             return (
               <CCollapse visible={details.includes(item.id)}>
                 <div className="p-2 border-start border-primary">
                   <div className="d-flex justify-content-between align-items-center mb-3">
                     <h6 className="mb-0">Cuotas mensuales de {item.nombreCompleto}</h6>
-                    <CButton
-                      color="secondary"
-                      size="sm"
-                      variant="outline"
-                      onClick={() => toggleFiltroImpagas(item.id)}
-                    >
+                    <CButton size="sm" color="secondary" variant="outline" onClick={() => toggleFiltroImpagas(item.id)}>
                       {soloImpagas ? 'Mostrar todas' : 'Mostrar solo impagas'}
                     </CButton>
                   </div>
@@ -192,10 +214,11 @@ export const AdministrarCuotas = () => {
                     <table className="table table-sm table-bordered align-middle mb-0">
                       <thead className="table-light">
                         <tr>
-                          <th style={{ width: '25%' }}>Vencimiento</th>
-                          <th style={{ width: '25%' }}>Monto</th>
-                          <th style={{ width: '25%' }}>Estado</th>
-                          <th style={{ width: '25%' }}>Fecha de pago</th>
+                          <th>Vencimiento</th>
+                          <th>Monto</th>
+                          <th>Estado</th>
+                          <th>Fecha de pago</th>
+                          <th>Editar</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -203,23 +226,15 @@ export const AdministrarCuotas = () => {
                           <tr key={cuota.id}>
                             <td>{new Date(cuota.fechaVencimiento).toLocaleDateString()}</td>
                             <td>${cuota.monto}</td>
-                            <td>
-                              <span className={`fw-bold ${cuota.pagada ? 'text-success' : 'text-danger'}`}>
-                                {cuota.pagada ? '✅ Pagada' : '❌ Impaga'}
-                              </span>
+                            <td className={cuota.pagada ? 'text-success fw-bold' : 'text-danger fw-bold'}>
+                              {cuota.pagada ? '✅ Pagada' : '❌ Impaga'}
                             </td>
+                            <td>{cuota.pagada && cuota.fechaPago ? new Date(cuota.fechaPago).toLocaleDateString() : '-'}</td>
                             <td>
-                              {cuota.pagada && cuota.fechaPago
-                                ? new Date(cuota.fechaPago).toLocaleDateString()
-                                : '-'}
                               <CButton
                                 size="sm"
-                                className="ms-2"
-                                style={{
-                                  backgroundColor: '#fff176',
-                                  color: '#f57f17',
-                                  border: '1px solid #fbc02d',
-                                }}
+                                color="warning"
+                                style={{ color: '#fff' }}
                                 onClick={() => abrirModalEdicion(cuota, item.id)}
                               >
                                 Editar
@@ -235,86 +250,69 @@ export const AdministrarCuotas = () => {
             )
           },
         }}
-        tableProps={{
-          responsive: true,
-          striped: true,
-          hover: true,
-          className: 'table-sm',
-        }}
-        tableBodyProps={{
-          className: 'align-middle',
-        }}
+        tableProps={{ responsive: true, striped: true, hover: true, className: 'table-sm' }}
+        tableBodyProps={{ className: 'align-middle' }}
       />
-      {modalVisible && (
-      <div
-        className="position-fixed top-0 start-0 w-100 h-100"
-        style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.6)',
-          zIndex: 1050,
-        }}
-      >
-        <div className="modal d-block h-100 d-flex align-items-center justify-content-center">
-          <div className="modal-dialog">
-            <div
-              className="modal-content"
-              style={{
-                backgroundColor: '#fff',
-                borderRadius: '8px',
-                boxShadow: '0 0 20px rgba(0,0,0,0.3)',
-              }}
-            >
-              <div className="modal-header">
-                <h5 className="modal-title">Editar cuota</h5>
-                <button type="button" className="btn-close" onClick={() => setModalVisible(false)}></button>
-              </div>
-              <div className="modal-body">
-                <div className="mb-3">
-                  <label className="form-label">¿Está pagada?</label>
-                  <select
-                    className="form-select"
-                    value={formPago.pagada ? 'sí' : 'no'}
-                    onChange={(e) =>
-                      setFormPago((prev) => ({
-                        ...prev,
-                        pagada: e.target.value === 'sí',
-                      }))
-                    }
-                  >
-                    <option value="no">No</option>
-                    <option value="sí">Sí</option>
-                  </select>
-                </div>
-                {formPago.pagada && (
-                  <div className="mb-3">
-                    <label className="form-label">Fecha de pago</label>
-                    <input
-                      type="date"
-                      className="form-control"
-                      value={formPago.fechaPago}
-                      onChange={(e) =>
-                        setFormPago((prev) => ({
-                          ...prev,
-                          fechaPago: e.target.value,
-                        }))
-                      }
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="modal-footer">
-                <CButton color="secondary" onClick={() => setModalVisible(false)}>
-                  Cancelar
-                </CButton>
-                <CButton color="primary" onClick={guardarEdicionCuota}>
-                  Guardar
-                </CButton>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )}
 
+      {/* Modal Editar */}
+      <CModal visible={modalEditarVisible} onClose={() => setModalEditarVisible(false)}>
+        <CModalHeader>
+          <CModalTitle>Editar cuota</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <label>¿Está pagada?</label>
+          <select
+            className="form-select mb-2"
+            value={formPago.pagada ? 'sí' : 'no'}
+            onChange={(e) => setFormPago((prev) => ({ ...prev, pagada: e.target.value === 'sí' }))}
+          >
+            <option value="no">No</option>
+            <option value="sí">Sí</option>
+          </select>
+          {formPago.pagada && (
+            <>
+              <label>Fecha de pago</label>
+              <CFormInput
+                type="date"
+                value={formPago.fechaPago}
+                onChange={(e) => setFormPago((prev) => ({ ...prev, fechaPago: e.target.value }))}
+              />
+            </>
+          )}
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setModalEditarVisible(false)}>
+            Cancelar
+          </CButton>
+          <CButton color="primary" onClick={guardarEdicionCuota}>
+            Guardar
+          </CButton>
+        </CModalFooter>
+      </CModal>
+
+      {/* Modal Nueva Cuota */}
+      <CModal visible={modalNuevaVisible} onClose={() => setModalNuevaVisible(false)}>
+        <CModalHeader>
+          <CModalTitle>Nueva cuota</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <label>Monto</label>
+          <CFormInput
+            type="number"
+            value={formNuevaCuota.monto}
+            onChange={(e) => setFormNuevaCuota({ monto: e.target.value })}
+          />
+          <p className="text-muted mt-2">Fecha de vencimiento: {new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()}</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setModalNuevaVisible(false)}>
+            Cancelar
+          </CButton>
+          <CButton color="success" onClick={guardarNuevaCuota}>
+            Crear
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </CCard>
   )
 }
