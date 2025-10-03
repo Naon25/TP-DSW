@@ -4,21 +4,34 @@ import { CuotaMensual } from './cuotaMensual.entity.js';
 
 const em = orm.em;
 
-function sanitizeCuotaMensualInput(req: Request, res: Response, next: NextFunction){
-  req.body.sanitizedInput ={
-    fechaVencimiento: req.body.fechaVencimiento,
-    monto: req.body.monto,
-    pagada: req.body.pagada,
-    fechaPago: req.body.fechaPago,
-    socio: req.body.socio,
+function sanitizeCuotaMensualInput(req: Request, res: Response, next: NextFunction) {
+  const body = req.body || {};
+  const input: any = {};
+
+  if (body.monto !== undefined && body.monto !== null && body.monto !== '') {
+    input.monto = Number(body.monto);
   }
-  Object.keys(req.body.sanitizedInput).forEach((key) => {
-    if (req.body.sanitizedInput[key] === undefined) { 
-      delete req.body.sanitizedInput[key];
-    }
-  });
+
+  if (body.fechaVencimiento) {
+    input.fechaVencimiento = new Date(body.fechaVencimiento); // validar en handler si hace falta
+  }
+
+  if (body.fechaPago) {
+    input.fechaPago = new Date(body.fechaPago);
+  }
+
+  if (body.pagada !== undefined) {
+    input.pagada = body.pagada === true || body.pagada === 'true';
+  }
+
+  if (body.socio !== undefined && body.socio !== null && body.socio !== '') {
+    input.socio = Number(body.socio); // dejo solo el id numérico aquí
+  }
+
+  req.body.sanitizedInput = input;
   next();
 }
+
 
 async function findAll(req: Request, res: Response) {
   try{
@@ -41,11 +54,14 @@ async function findOne(req: Request, res: Response) {
 }
 
 async function add(req: Request, res: Response) {
-  try{
+  try {
     const cuotaMensual = em.create(CuotaMensual, req.body.sanitizedInput);
-    await em.flush();
-    res.status(201).json({message: 'Cuota mensual created', data: cuotaMensual});
-  }catch (error:any) {
+
+    await em.persistAndFlush(cuotaMensual); // 👈 en create mejor usar persistAndFlush
+
+    res.status(201).json({ message: 'Cuota mensual created', data: cuotaMensual });
+  } catch (error: any) {
+    console.error(error);
     return res.status(400).send({ message: error.message });
   }
 }
@@ -54,10 +70,14 @@ async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
     const cuotaMensualToUpdate = await em.findOneOrFail(CuotaMensual, { id });
+
     em.assign(cuotaMensualToUpdate, req.body.sanitizedInput);
-    em.flush();
-    res.status(200).json({message: 'Cuota mensual updated', data: cuotaMensualToUpdate});
+
+    await em.persistAndFlush(cuotaMensualToUpdate); // 👈 asegura el update
+
+    res.status(200).json({ message: 'Cuota mensual updated', data: cuotaMensualToUpdate });
   } catch (error: any) {
+    console.error(error);
     return res.status(500).send({ message: error.message });  
   }
 }

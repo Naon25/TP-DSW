@@ -33,8 +33,14 @@ export default function AdministrarSocios() {
     setSocios(res.data.data);
   };
 
- const handleCrear = async (e) => {
+const handleCrear = async (e) => {
   e.preventDefault();
+
+  if (!tipoAfiliacion.trim()) {
+    alert('Debés seleccionar un tipo de afiliación válido.');
+    return;
+  }
+
   const socioResp = await crearSocio({ nombre, apellido, dni, telefono, email });
   const socioId = socioResp.data.data.id;
 
@@ -52,6 +58,7 @@ export default function AdministrarSocios() {
   setEmail('');
   setTipoAfiliacion('');
 };
+
 
   const handleEliminar = async (id) => {
     try {
@@ -131,13 +138,16 @@ export default function AdministrarSocios() {
                 />
               </CCol>
               <CCol md={3}>
-                <CFormInput
-                  label="Tipo de Afiliación"
-                  placeholder="Ej: Titular / Adherente"
+                <label className="form-label">Tipo de Afiliación</label>
+                <select
+                  className="form-select"
                   value={tipoAfiliacion}
                   onChange={(e) => setTipoAfiliacion(e.target.value)}
                   required
-                />
+                >
+                  <option value="" disabled>Seleccione un tipo</option>
+                  <option value="Básica">Básica</option>
+                </select>
               </CCol>
             </CRow>
             <CButton color="primary" type="submit">

@@ -270,11 +270,16 @@ export const AdministrarAfiliaciones = () => {
         <CModalBody>
           <div className="mb-3">
             <label className="form-label">Tipo</label>
-            <CFormInput
+            <select
+              className="form-select"
               value={formData.tipo}
               onChange={(e) => setFormData((prev) => ({ ...prev, tipo: e.target.value }))}
-            />
+            >
+              <option value="" disabled>Seleccione un tipo</option>
+              <option value="Básica">Básica</option>
+            </select>
           </div>
+
           <div className="mb-3">
             <label className="form-label">Estado</label>
             <select
@@ -300,16 +305,19 @@ export const AdministrarAfiliaciones = () => {
           <p>La fecha de inicio será hoy ({new Date().toLocaleDateString()})</p>
           <div className="mb-3">
             <label className="form-label">Tipo</label>
-            <CFormInput
+            <select
+              className="form-select"
               value={nuevoTipo}
               onChange={(e) => setNuevoTipo(e.target.value)}
-              placeholder="Ej: Básica, Premium..."
-            />
+            >
+              <option value="">Seleccione un tipo</option>
+              <option value="Básica">Básica</option>
+            </select>
           </div>
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalNuevaVisible(false)}>Cancelar</CButton>
-          <CButton color="success" onClick={guardarNueva}>Crear</CButton>
+          <CButton color="success" onClick={guardarNueva} disabled={!nuevoTipo}>Crear</CButton>
         </CModalFooter>
       </CModal>
     </CCard>

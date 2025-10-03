@@ -14,11 +14,13 @@ import {
 } from '@coreui/react-pro'
 import { getSocios } from '../api/socios.js'
 import { getCuotas, actualizarCuota, crearCuota } from '../api/cuotas.js'
+import { getAfiliaciones } from '../api/afiliaciones.js'
 
 export const AdministrarCuotas = () => {
   const [details, setDetails] = useState([])
   const [socios, setSocios] = useState([])
   const [cuotasPorSocio, setCuotasPorSocio] = useState({})
+  const [afiliacionesPorSocio, setAfiliacionesPorSocio] = useState({})
   const [loadingCuotas, setLoadingCuotas] = useState({})
   const [mostrarSoloImpagas, setMostrarSoloImpagas] = useState({})
   const [errorSocios, setErrorSocios] = useState(false)
@@ -33,24 +35,32 @@ export const AdministrarCuotas = () => {
   const [socioSeleccionado, setSocioSeleccionado] = useState(null)
 
   useEffect(() => {
-    const fetchSocios = async () => {
+    const fetchSociosYAfiliaciones = async () => {
       try {
-        const resp = await getSocios()
-        const arr = resp?.data?.data ?? resp?.data
-        if (Array.isArray(arr)) {
-          const filtrados = arr.filter((s) => s.id && s.nombre && s.apellido)
-          setSocios(filtrados)
-        } else {
-          setErrorSocios(true)
-        }
+        const respSocios = await getSocios()
+        const arr = respSocios?.data?.data ?? []
+        const filtrados = arr.filter((s) => s.id && s.nombre && s.apellido)
+        setSocios(filtrados)
+
+        const respAfiliaciones = await getAfiliaciones()
+        const todas = respAfiliaciones?.data?.data ?? []
+        const agrupadas = {}
+        todas.forEach((a) => {
+          const id = a.socio?.id
+          if (!id) return
+          if (!agrupadas[id]) agrupadas[id] = []
+          agrupadas[id].push(a)
+        })
+        setAfiliacionesPorSocio(agrupadas)
       } catch (error) {
-        console.error('Error al cargar socios:', error)
+        console.error('Error al cargar socios o afiliaciones:', error)
         setErrorSocios(true)
       } finally {
         setLoadingSocios(false)
       }
     }
-    fetchSocios()
+
+    fetchSociosYAfiliaciones()
   }, [])
 
   const toggleDetails = async (id) => {
@@ -114,22 +124,38 @@ export const AdministrarCuotas = () => {
 
   const guardarNuevaCuota = async () => {
     if (!socioSeleccionado) return
+
+    const afiliaciones = afiliacionesPorSocio[socioSeleccionado.id] || []
+    const tieneActiva = afiliaciones.some((a) => !a.fechaFin)
+
+    if (!tieneActiva) {
+      alert('Este socio no tiene una afiliación activa. No se puede crear una cuota mensual.')
+      return
+    }
+
     try {
       const fechaVencimiento = new Date()
       fechaVencimiento.setMonth(fechaVencimiento.getMonth() + 1)
 
-      const nueva = await crearCuota({
-        socio: { id: socioSeleccionado.id },
+      const resp = await crearCuota({
+        socio: socioSeleccionado.id,
         monto: Number(formNuevaCuota.monto),
         fechaVencimiento: fechaVencimiento.toISOString(),
         pagada: false,
       })
 
-      setCuotasPorSocio((prev) => ({
-        ...prev,
-        [socioSeleccionado.id]: [...(prev[socioSeleccionado.id] || []), nueva],
-      }))
+      const nueva = resp?.data?.data ?? {
+        monto: Number(formNuevaCuota.monto),
+        fechaVencimiento: fechaVencimiento.toISOString(),
+      }
+
+      setCuotasPorSocio((prev) => {
+        const list = prev[socioSeleccionado.id] || []
+        return { ...prev, [socioSeleccionado.id]: [...list, nueva] }
+      })
+
       setModalNuevaVisible(false)
+      setSocioSeleccionado(null)
     } catch (error) {
       console.error('Error al crear nueva cuota:', error)
     }
@@ -181,13 +207,10 @@ export const AdministrarCuotas = () => {
                 size="sm"
                 color="primary"
                 variant="outline"
-                className="me-2"
+                className="float-end"
                 onClick={() => toggleDetails(item.id)}
               >
                 {details.includes(item.id) ? 'Ocultar' : 'Ver'}
-              </CButton>
-              <CButton size="sm" color="success" onClick={() => abrirModalNuevaCuota(item)}>
-                Nueva cuota
               </CButton>
             </td>
           ),
@@ -202,9 +225,23 @@ export const AdministrarCuotas = () => {
                 <div className="p-2 border-start border-primary">
                   <div className="d-flex justify-content-between align-items-center mb-3">
                     <h6 className="mb-0">Cuotas mensuales de {item.nombreCompleto}</h6>
-                    <CButton size="sm" color="secondary" variant="outline" onClick={() => toggleFiltroImpagas(item.id)}>
-                      {soloImpagas ? 'Mostrar todas' : 'Mostrar solo impagas'}
-                    </CButton>
+                    <div className="d-flex gap-2">
+                      <CButton
+                        size="sm"
+                        color="secondary"
+                        variant="outline"
+                        onClick={() => toggleFiltroImpagas(item.id)}
+                      >
+                        {soloImpagas ? 'Mostrar todas' : 'Mostrar solo impagas'}
+                      </CButton>
+                      <CButton
+                        size="sm"
+                        color="success"
+                        onClick={() => abrirModalNuevaCuota(item)}
+                      >
+                        Nueva cuota
+                      </CButton>
+                    </div>
                   </div>
                   {loading ? (
                     <CSpinner size="sm" color="primary" />
@@ -302,7 +339,9 @@ export const AdministrarCuotas = () => {
             value={formNuevaCuota.monto}
             onChange={(e) => setFormNuevaCuota({ monto: e.target.value })}
           />
-          <p className="text-muted mt-2">Fecha de vencimiento: {new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()}</p>
+          <p className="text-muted mt-2">
+            Fecha de vencimiento: {new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()}
+          </p>
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setModalNuevaVisible(false)}>
