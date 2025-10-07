@@ -10,7 +10,6 @@ import {
   CModalHeader,
   CModalBody,
   CModalFooter,
-  CFormInput,
 } from '@coreui/react-pro'
 import { getSocios } from '../api/socios.js'
 import { getAfiliaciones, actualizarAfiliacion, crearAfiliacion } from '../api/afiliaciones.js'

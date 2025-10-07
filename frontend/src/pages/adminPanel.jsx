@@ -21,15 +21,16 @@ export function AdminPanel() {
       <AdminNavbar onSeleccion={handleSeleccion} paginaActual={pagina} />
       {!pagina && <AdminHome onSeleccion={handleSeleccion} />}
       <CContainer style={{ marginTop: '70px' }}>
-        {pagina === 'socios' && (
-          <MenuAdminSocios onSeleccion={handleSeleccion} />
-        )}
+
+        {pagina === 'socios' && (<MenuAdminSocios onSeleccion={handleSeleccion} />)}
         {pagina === 'administrarSocios' && <AdministrarSocios />}
         {pagina === 'administrarCuotas' && <AdministrarCuotas/>}
         {pagina === 'administrarAfiliaciones' && <AdministrarAfiliaciones/>}
+
         {pagina === 'embarcaciones' && (
           <div>Gestión de embarcaciones (próximamente)</div>
         )}
+
         {pagina === 'amarras' && <MenuAdminAmarras onSeleccion={handleSeleccion}/>}
         {pagina === 'administrarAmarras' && <AdministrarAmarras/>}
       </CContainer>
