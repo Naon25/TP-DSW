@@ -16,9 +16,28 @@ function sanitizeCuotaMensualInput(req: Request, res: Response, next: NextFuncti
     input.fechaVencimiento = new Date(body.fechaVencimiento); // validar en handler si hace falta
   }
 
-  if (body.fechaPago) {
-    input.fechaPago = new Date(body.fechaPago);
+if (body.fechaPago) {
+  let fecha: Date | null = null;
+
+  if (typeof body.fechaPago === 'string' && body.fechaPago.includes('T')) {
+    // Caso: viene en formato ISO ('2025-10-09T03:00:00.000Z')
+    const localDate = new Date(body.fechaPago);
+    fecha = new Date(localDate.getFullYear(), localDate.getMonth(), localDate.getDate());
+  } else if (typeof body.fechaPago === 'string') {
+    // Caso: viene como '2025-10-09'
+    const [year, month, day] = body.fechaPago.split('-').map(Number);
+    fecha = new Date(year, month - 1, day);
+  } else if (body.fechaPago instanceof Date) {
+    fecha = body.fechaPago;
   }
+
+  if (fecha && !isNaN(fecha.getTime())) {
+    input.fechaPago = fecha;
+    console.log('✅ Fecha normalizada y guardada:', fecha);
+  } else {
+    console.warn('⚠️ Fecha de pago inválida recibida:', body.fechaPago);
+  }
+}
 
   if (body.pagada !== undefined) {
     input.pagada = body.pagada === true || body.pagada === 'true';

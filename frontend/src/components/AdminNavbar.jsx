@@ -24,10 +24,20 @@ export function AdminNavbar({ onSeleccion, paginaActual }) {
             onClick={() => onSeleccion(null)}
             style={{ cursor: 'pointer', color: 'white', marginRight: '1rem' }}
           >
-            Club Náutico Admin
+            Club Náutico
           </CNavbarBrand>
 
           <CNavbarNav className="d-flex flex-row">
+            <CNavItem>
+              <CNavLink
+                active={paginaActual === 'perfil'}
+                href="#"
+                onClick={() => onSeleccion('perfil')}
+                style={{ color: 'white' }}
+              >
+                Perfil
+              </CNavLink>
+            </CNavItem>
             <CNavItem>
               <CNavLink
                 active={paginaActual === 'socios'}

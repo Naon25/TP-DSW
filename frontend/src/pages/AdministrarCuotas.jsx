@@ -97,8 +97,8 @@ export const AdministrarCuotas = () => {
     try {
       await actualizarCuota(cuotaEditando.id, {
         pagada: formPago.pagada,
-        fechaPago: formPago.pagada ? new Date(formPago.fechaPago).toISOString() : null,
-      })
+        fechaPago: formPago.pagada ? formPago.fechaPago : null, // ← sin toISOString
+      });
 
       setCuotasPorSocio((prev) => {
         const actualizadas = prev[cuotaEditando.socioId].map((c) =>
@@ -266,7 +266,15 @@ export const AdministrarCuotas = () => {
                             <td className={cuota.pagada ? 'text-success fw-bold' : 'text-danger fw-bold'}>
                               {cuota.pagada ? '✅ Pagada' : '❌ Impaga'}
                             </td>
-                            <td>{cuota.pagada && cuota.fechaPago ? new Date(cuota.fechaPago).toLocaleDateString() : '-'}</td>
+                            <td>
+                              {cuota.fechaPago
+                                ? new Date(
+                                    cuota.fechaPago.includes('T')
+                                      ? cuota.fechaPago
+                                      : `${cuota.fechaPago}T00:00:00`
+                                  ).toLocaleDateString()
+                                : '-'}
+                            </td>
                             <td>
                               <CButton
                                 size="sm"
