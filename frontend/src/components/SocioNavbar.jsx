@@ -36,6 +36,21 @@ export function SocioNavbar({ onSeleccion }) {
                 Embarcaciones
               </CNavLink>
             </CNavItem>
+            <CNavItem>
+              <CNavLink href="#" onClick={() => onSeleccion('amarras')} style={{ color: 'white' }}>
+                Amarras/Boxes
+              </CNavLink>
+            </CNavItem>
+            <CNavItem>
+              <CNavLink href="#" onClick={() => onSeleccion('reservas')} style={{ color: 'white' }}>
+                Reservas
+              </CNavLink>
+            </CNavItem>
+            <CNavItem>
+              <CNavLink href="#" onClick={() => onSeleccion('cuotas')} style={{ color: 'white' }}>
+                Cuotas
+              </CNavLink>
+            </CNavItem>
           </CNavbarNav>
         </div>
 

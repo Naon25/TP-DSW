@@ -26,8 +26,14 @@ export default function SocioHome({onSeleccion}) {
     {
       title: 'Reservas',
       icon: cilCalendar,
-      link: '/reservas',
+      link: 'reservas',
       desc: 'Reservar embarcación del club',
+    },
+    {
+      title: 'Cuotas y pagos',
+      icon: cilCalendar,
+      link: 'cuotas',
+      desc: 'Listado de mis cuotas',
     },
   ];
 
