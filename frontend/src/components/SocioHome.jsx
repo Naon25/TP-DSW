@@ -6,7 +6,7 @@ import {
   CRow,
   CCol,
 } from '@coreui/react';
-import { cilPool, cilBoatAlt, cilCalendar } from '@coreui/icons';
+import { cilPool, cilBoatAlt, cilCalendar, cilWallet } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 
 export default function SocioHome({onSeleccion}) {
@@ -31,7 +31,7 @@ export default function SocioHome({onSeleccion}) {
     },
     {
       title: 'Cuotas y pagos',
-      icon: cilCalendar,
+      icon: cilWallet,
       link: 'cuotas',
       desc: 'Listado de mis cuotas',
     },

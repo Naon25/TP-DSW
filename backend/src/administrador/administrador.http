@@ -7,10 +7,10 @@ POST http://localhost:3000/api/administradores
 Content-Type: application/json
 
 {
-  "nombre": "Diego",
-  "apellido": "Lopez",
-  "dni": "43222222",
-  "email":"diego.lopez@gmail.com"
+  "nombre": "Alexis",
+  "apellido": "Galasco",
+  "dni": "43842560",
+  "email":"alexis.galasco123@gmail.com"
 }
 
 ### ID

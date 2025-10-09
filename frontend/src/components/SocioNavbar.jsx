@@ -2,63 +2,67 @@ import {
   CNavbar,
   CContainer,
   CNavbarBrand,
-  CNavItem,
-  CNavLink,
-  CNavbarNav,
   CButton,
 } from '@coreui/react';
 
-export function SocioNavbar({ onSeleccion }) {
+export function SocioNavbar({ onSeleccion, paginaActual, socio }) {
   const handleLogout = () => {
     localStorage.clear();
     window.location.href = '/';
   };
 
+  const navItems = [
+    { key: 'perfil', label: 'Perfil' },
+    { key: 'embarcaciones', label: 'Embarcaciones' },
+    { key: 'amarras', label: 'Amarras/Boxes' },
+    { key: 'reservas', label: 'Reservas' },
+    { key: 'cuotas', label: 'Cuotas' },
+  ];
+
   return (
-    <CNavbar colorScheme="dark" className="bg-success px-3" expand="lg" fixed="top">
-      <CContainer fluid className="d-flex justify-content-between align-items-center">
-        {/* Izquierda */}
-        <div className="d-flex align-items-center">
+    <>
+      {/* Encabezado principal */}
+      <CNavbar colorScheme="light" className="px-3" style={{ backgroundColor: '#146fafff' }} expand="lg" fixed="top">
+        <CContainer fluid className="d-flex justify-content-between align-items-center">
           <CNavbarBrand
             onClick={() => onSeleccion(null)}
-            style={{ cursor: 'pointer', color: 'white', marginRight: '1rem' }}
+            style={{
+              cursor: 'pointer',
+              color: 'white',
+              fontSize: '1.9rem',
+              fontWeight: 'bold',
+            }}
           >
-            Club Náutico
+            {socio ? `${socio.apellido} ${socio.nombre}` : 'Socio'}
           </CNavbarBrand>
 
-          <CNavbarNav className="d-flex flex-row">
-            <CNavItem>
-              <CNavLink
-                href="#"
-                onClick={() => onSeleccion('embarcaciones')}
-                style={{ color: 'white', paddingLeft: 0 }}
-              >
-                Embarcaciones
-              </CNavLink>
-            </CNavItem>
-            <CNavItem>
-              <CNavLink href="#" onClick={() => onSeleccion('amarras')} style={{ color: 'white' }}>
-                Amarras/Boxes
-              </CNavLink>
-            </CNavItem>
-            <CNavItem>
-              <CNavLink href="#" onClick={() => onSeleccion('reservas')} style={{ color: 'white' }}>
-                Reservas
-              </CNavLink>
-            </CNavItem>
-            <CNavItem>
-              <CNavLink href="#" onClick={() => onSeleccion('cuotas')} style={{ color: 'white' }}>
-                Cuotas
-              </CNavLink>
-            </CNavItem>
-          </CNavbarNav>
-        </div>
+          <CButton color="light" variant="outline" onClick={handleLogout}>
+            Cerrar sesión
+          </CButton>
+        </CContainer>
+      </CNavbar>
 
-        {/* Derecha */}
-        <CButton color="light" variant="outline" onClick={handleLogout}>
-          Cerrar sesión
-        </CButton>
-      </CContainer>
-    </CNavbar>
+      {/* Barra secundaria integrada */}
+      <div className="px-4" style={{ backgroundColor: '#146fafff' }}>
+        <div className="d-flex gap-3 pt-2">
+          {navItems.map((item) => (
+            <div
+              key={item.key}
+              onClick={() => onSeleccion(item.key)}
+              style={{
+                cursor: 'pointer',
+                padding: '6px 12px',
+                borderRadius: '6px 6px 0 0',
+                backgroundColor: paginaActual === item.key ? '#ffffff22' : 'transparent',
+                color: 'white',
+                fontWeight: paginaActual === item.key ? 'bold' : 'normal',
+              }}
+            >
+              {item.label}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }

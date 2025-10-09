@@ -3,6 +3,7 @@ import { SocioNavbar } from '../components/SocioNavbar.jsx';
 import SocioHome from '../components/SocioHome.jsx';
 import {SocioEmbarcaciones} from '../components/SocioEmbarcaciones.jsx';
 import { SocioCuotas } from '../components/SocioCuotas.jsx';
+import { SocioPerfil } from '../components/SocioPerfil.jsx';
 
 
 export function SocioPanel() {
@@ -32,8 +33,11 @@ useEffect(() => {
 
   return (
     <>
-        <SocioNavbar onSeleccion={handleSeleccion} paginaActual={pagina} />
+        <SocioNavbar onSeleccion={handleSeleccion} paginaActual={pagina} socio={socio} />
         {!pagina && <SocioHome onSeleccion={handleSeleccion} />}
+        {pagina === 'perfil' && socio && (
+         <SocioPerfil  idSocio={socio.id} />
+        )}
         {pagina === 'embarcaciones' && socio && (
          <SocioEmbarcaciones idSocio={socio.id} />
         )}
