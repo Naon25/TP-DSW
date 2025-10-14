@@ -8,11 +8,29 @@ em.getRepository(Amarra)
 
 
 async function findAll(req: Request, res: Response) {
-  try{
-    const amarras = await em.find(Amarra, {})
-    res.status(200).json({message:' finded all amarras', data: amarras}) 
-  } catch (error: any){
-    res.status(500).json ({message: error.message})
+  try {
+    const { zona, estado } = req.query;
+    const where: any = {};
+    
+    if (zona) {
+      where.zona = zona.toString();
+    }
+    if (estado) {
+      where.estado = estado.toString();
+    }
+    
+    const amarras = await em.find(Amarra, where);
+    res.status(200).json({
+      message: Object.keys(where).length > 0 ? `Amarras filtradas por ${Object.keys(where).join(' y ')}` : 'Todas las amarras',
+      data: amarras
+    });
+    
+  } catch (error: any) {
+    console.error('Error al buscar amarras:', error);
+    res.status(500).json({
+      message: 'Error al buscar amarras',
+      error: error.message
+    });
   }
 }
 

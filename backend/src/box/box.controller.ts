@@ -6,10 +6,24 @@ const em = orm.em;
 em.getRepository(Box)
 async function findAll(req: Request, res: Response) {
   try {
-    const boxes = await em.find(Box, {});
-    res.status(200).json({ message: 'found all boxes', data: boxes });
+    const { estado } = req.query;
+    const where: any = {};
+    
+    if (estado) {
+      where.estado = estado.toString();
+    }
+    
+    const boxes = await em.find(Box, where);
+    res.status(200).json({ 
+      message: estado ? `Boxes filtrados por estado: ${estado}` : 'Todos los boxes',
+      data: boxes 
+    });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al buscar boxes:', error);
+    res.status(500).json({ 
+      message: 'Error al buscar boxes',
+      error: error.message 
+    });
   }
 }
 

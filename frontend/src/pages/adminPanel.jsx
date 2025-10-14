@@ -7,6 +7,7 @@ import AdministrarSocios from './AdministrarSocios.jsx';
 import AdministrarAmarras from './AdministrarAmarras.jsx';
 import AdminHome from '../components/AdminHome.jsx';
 import { AdministrarCuotas } from './AdministrarCuotas.jsx'
+import ListarAmarras from './ListarAmarras.jsx'; 
 // importá otros componentes cuando los tengas
 
 export function AdminPanel() {
@@ -31,6 +32,7 @@ export function AdminPanel() {
         )}
         {pagina === 'amarras' && <MenuAdminAmarras onSeleccion={handleSeleccion}/>}
         {pagina === 'administrarAmarras' && <AdministrarAmarras/>}
+        {pagina === 'listarAmarras' && <ListarAmarras/>}
       </CContainer>
     </>
   );
