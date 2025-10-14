@@ -5,12 +5,14 @@ import {
   PrimaryKey,
 } from '@mikro-orm/core';
 
+export type Estado = 'disponible' | 'ocupado' | 'mantenimiento';
+
 @Entity()
 export class Box extends BaseEntity {
 
 
   @Property()
-  estado!: string;
+  estado!: Estado;
 
   @Property()
   nroBox!: string;

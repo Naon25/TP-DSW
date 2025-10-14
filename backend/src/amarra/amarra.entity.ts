@@ -1,13 +1,16 @@
-import { Entity, PrimaryKey, Property, OneToMany  } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, OneToMany, Enum  } from '@mikro-orm/core';
 
-export type Estado = 'libre' | 'ocupado'
+export enum Estado {
+  LIBRE = 'libre',
+  OCUPADO = 'ocupado'
+}
 
 @Entity()
 export class Amarra{
     @PrimaryKey()
     id?: number
-    
-    @Property()
+
+    @Enum(() => Estado)
     estado!: Estado
 
     @Property()
@@ -22,7 +25,5 @@ export class Amarra{
     @Property()
     nroPilon!: number
 
-
-    
 
 }
