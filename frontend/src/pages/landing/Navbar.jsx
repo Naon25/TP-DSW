@@ -35,7 +35,9 @@ const Navbar = () => {
         <Link to="/about">About us</Link>
         <Link to="/testimonials">Testimonials</Link>
         <Link to="/contact">Contact</Link>
-        <button className="logbtn">Log in</button>
+        <Link to= "/login">
+          <button className="logbtn">Log in</button> 
+        </Link>
       </div>
 
       <div className="navbar-menu-container">
