@@ -19,7 +19,6 @@ const Home = () => {
           Bienvenido a nuestro espacio. Navegá, aprendé y disfrutá de la vida
           junto al agua.
         </p>
-        <button className="home-btn">Explorar</button>
       </div>
     </div>
 };
