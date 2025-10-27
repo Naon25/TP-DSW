@@ -34,7 +34,9 @@ useEffect(() => {
   return (
     <>
         <SocioNavbar onSeleccion={handleSeleccion} paginaActual={pagina} socio={socio} />
-        {!pagina && <SocioHome onSeleccion={handleSeleccion} />}
+        {pagina === null && socio && (
+        <SocioHome idSocio={socio.id} onSeleccion={setPagina} />
+        )}
         {pagina === 'perfil' && socio && (
          <SocioPerfil  idSocio={socio.id} />
         )}
