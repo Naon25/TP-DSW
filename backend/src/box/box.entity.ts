@@ -3,16 +3,24 @@ import {
   Entity,
   Property,
   PrimaryKey,
+  Enum,
 } from '@mikro-orm/core';
 
-export type Estado = 'disponible' | 'ocupado' | 'mantenimiento';
 
-@Entity()
-export class Box extends BaseEntity {
+export enum Estado {
+  DISPONIBLE = 'disponible',
+  OCUPADO = 'ocupado',
+  MANTENIMIENTO = 'mantenimiento'
+}
 
+ @Entity()
+  export class Box extends BaseEntity {
 
-  @Property()
-  estado!: Estado;
+  @PrimaryKey()
+    id?: number
+      
+  @Enum(() => Estado)
+  estado!: Estado
 
   @Property()
   nroBox!: string;
