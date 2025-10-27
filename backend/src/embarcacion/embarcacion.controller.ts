@@ -74,4 +74,20 @@ async function remove(req: Request, res: Response) {
     }
 }
 
-export { sanitizeEmbarcacionInput, findAll, findOne, add, update, remove };
+async function findBySocio(req: Request, res: Response) {
+  try {
+    const idSocio = Number.parseInt(req.params.idSocio);
+    const embarcaciones = await em.find(
+      Embarcacion,
+      { socio: idSocio },
+      { populate: ['tipoEmbarcacion', 'socio'] }
+    );
+
+    res.status(200).json({ message: 'found embarcaciones by socio', data: embarcaciones });
+  } catch (error: any) {
+    res.status(500).send({ message: error.message });
+  }
+}
+
+
+export { sanitizeEmbarcacionInput, findAll, findOne, add, update, remove, findBySocio };

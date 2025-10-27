@@ -73,11 +73,6 @@ async function update(req: Request, res: Response) {
 }
 
 
-
-
-
-
-
 async function remove(req: Request, res: Response) {
   try {
       const id = Number.parseInt(req.params.id);

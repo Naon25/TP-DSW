@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {CCard,CCardHeader,CCardBody,CRow,CCol,CForm,CFormInput,CButton,} from '@coreui/react';
+import {
+  CCard, CCardHeader, CCardBody,
+  CRow, CCol, CForm, CFormInput, CButton
+} from '@coreui/react';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -19,17 +22,30 @@ export default function LoginForm() {
         body: JSON.stringify({ email, password }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || 'Error al iniciar sesión');
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || 'Error al iniciar sesión');
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('tipo', data.tipo);
+
+      if (data.tipo === 'socio' && data.socio) {
+        localStorage.setItem('socio', JSON.stringify(data.socio));
+        console.log('✅ Socio guardado:', data.socio);
+        setTimeout(() => {
+          navigate('/socio');
+        }, 100);
+      } else if (data.tipo === 'admin' && data.admin) {
+        localStorage.setItem('admin', JSON.stringify(data.admin));
+        console.log('✅ Admin guardado:', data.admin);
+        setTimeout(() => {
+          navigate('/admin');
+        }, 100);
+      } else {
+        throw new Error('No se recibió el objeto del usuario');
       }
-
-      const { token, tipo } = await res.json();
-      localStorage.setItem('token', token);
-      localStorage.setItem('tipo', tipo);
-
-      navigate(tipo === 'admin' ? '/admin' : '/socio');
     } catch (err) {
+      console.error('❌ Error en login:', err);
       setError(err.message);
     }
   };

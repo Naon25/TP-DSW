@@ -56,7 +56,6 @@ async function add(req: Request, res: Response) {
         fechaInicio: new Date(),
         tipo: req.body.tipoAfiliacion,
         socio: newSocio,
-        fechaFin: null,
       });
       await em.persistAndFlush(afiliacion);
     }

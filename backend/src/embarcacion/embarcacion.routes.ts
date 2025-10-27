@@ -6,6 +6,7 @@ import {
   add,
   update,
   remove,
+  findBySocio
 } from './embarcacion.controller.js';
 
 export const embarcacionRouter = Router();
@@ -15,3 +16,5 @@ embarcacionRouter.get('/:id', findOne);
 embarcacionRouter.post('/', sanitizeEmbarcacionInput,add);
 embarcacionRouter.put('/:id',sanitizeEmbarcacionInput, update);
 embarcacionRouter.delete('/:id', remove);
+embarcacionRouter.get('/socio/:idSocio', findBySocio);
+

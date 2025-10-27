@@ -31,6 +31,15 @@ Content-Type: application/json
   "esloraMaxima": 10
 }
 
+### POST
+# @name createTipoEmbarcacion
+POST http://localhost:3000/api/tiposEmbarcacion
+Content-Type: application/json
+
+{
+  "nombre": "Barco pirata",
+  "esloraMaxima": 15
+}
 
 
 ### PUT

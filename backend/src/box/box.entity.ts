@@ -20,3 +20,5 @@ export class Box extends BaseEntity {
   @Property()
   precioMensualBase!: number;
 }
+
+
