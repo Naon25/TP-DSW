@@ -3,13 +3,16 @@ import { AdminNavbar } from '../components/AdminNavbar.jsx';
 import { CContainer } from '@coreui/react';
 import { MenuAdminSocios } from '../components/MenuAdminSocios.jsx';
 import { MenuAdminAmarras } from '../components/MenuAdminAmarras.jsx';
+import { MenuAdminBox } from '../components/MenuAdminBox.jsx';
 import AdministrarSocios from './AdministrarSocios.jsx';
 import AdministrarAmarras from './AdministrarAmarras.jsx';
+import AdministrarBoxes from './AdministrarBoxes.jsx';
 import AdminHome from '../components/AdminHome.jsx';
 import { AdministrarCuotas } from './AdministrarCuotas.jsx'
 import { AdministrarAfiliaciones} from './AdministrarAfiliaciones.jsx'
 import { AdminPerfil } from '../components/AdminPerfil.jsx';
-import ListarAmarras from './ListarAmarras.jsx'; 
+import ListarAmarras from './ListarAmarras.jsx';
+import ListarBoxes from './ListarBoxes.jsx';
 // importá otros componentes cuando los tengas
 
 export function AdminPanel() {
@@ -59,6 +62,10 @@ console.log('🔍 Render condicional: pagina =', pagina, ', admin =', admin);
         {pagina === 'amarras' && <MenuAdminAmarras onSeleccion={handleSeleccion}/>}
         {pagina === 'administrarAmarras' && <AdministrarAmarras/>}
         {pagina === 'listarAmarras' && <ListarAmarras/>}
+
+        {pagina === 'boxes' && <MenuAdminBox onSeleccion={handleSeleccion}/>}
+        {pagina === 'administrarBoxes' && <AdministrarBoxes/>}
+        {pagina === 'listarBoxes' && <ListarBoxes/>}
       </CContainer>
     </>
   );

@@ -68,6 +68,16 @@ export function AdminNavbar({ onSeleccion, paginaActual }) {
                 Amarras
               </CNavLink>
             </CNavItem>
+            <CNavItem>
+              <CNavLink
+                active={paginaActual === 'boxes'}
+                href="#"
+                onClick={() => onSeleccion('boxes')}
+                style={{ color: 'white' }}
+              >
+                Boxes
+              </CNavLink>
+            </CNavItem>
           </CNavbarNav>
         </div>
 
