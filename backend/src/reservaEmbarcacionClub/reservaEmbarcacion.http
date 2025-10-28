@@ -1,0 +1,118 @@
+### Crear embarcación (pertenece al club: socio null)
+# @name CreateClubEmbarcacion
+POST http://localhost:3000/api/embarcaciones
+Content-Type: application/json
+
+{
+  "nombre": "Club Boat A",
+  "matricula": "CBA-001",
+  "eslora": 8,
+  "potencia": 80,
+  "socio": null,
+  "tipoEmbarcacion": 1
+}
+
+### ID embarcación club
+@clubEmbId = {{CreateClubEmbarcacion.response.body.data.id}}
+
+
+### Crear embarcación (pertenece a un socio - NO es del club)
+# @name CreateOwnedEmbarcacion
+POST http://localhost:3000/api/embarcaciones
+Content-Type: application/json
+
+{
+  "nombre": "Cliente Boat B",
+  "matricula": "CBB-002",
+  "eslora": 9,
+  "potencia": 100,
+  "socio": 1,
+  "tipoEmbarcacion": 1
+}
+
+### ID embarcación con dueño
+@ownedEmbId = {{CreateOwnedEmbarcacion.response.body.data.id}}
+
+
+### Crear reserva válida (<= 3 horas) sobre embarcación del club
+# @name CreateReservaValida
+
+POST http://localhost:3000/api/reservasEmbarcacionClub
+Content-Type: application/json
+
+{
+  "embarcacion": 5,
+  "fechaInicio": "2025-10-28T13:00:00.000Z",
+  "fechaFin":   "2025-10-28T14:00:00.000Z",
+  "estado": "ACTIVA",
+  "socio": 22
+}
+
+### ID reserva creada
+@resId = {{CreateReservaValida.response.body.data.id}}
+
+
+### Crear reserva solapada (debe fallar por solapamiento con la anterior)
+# @name CreateReservaSolapada
+POST http://localhost:3000/api/reservasEmbarcacionClub
+Content-Type: application/json
+
+{
+  "embarcacion": {{clubEmbId}},
+  "fechaInicio": "2025-10-20T11:00:00.000Z",
+  "fechaFin":   "2025-10-20T13:00:00.000Z",
+  "estado": "ACTIVA"
+}
+
+
+### Crear reserva demasiado larga (> 3 horas) (debe fallar por validación de duración)
+# @name CreateReservaMuyLarga
+POST http://localhost:3000/api/reservasEmbarcacionClub
+Content-Type: application/json
+
+{
+  "embarcacion": {{clubEmbId}},
+  "fechaInicio": "2025-10-21T08:00:00.000Z",
+  "fechaFin":   "2025-10-21T12:30:00.000Z",
+  "estado": "ACTIVA"
+}
+
+
+### Crear reserva sobre embarcación con socio (NO es del club) (debe fallar)
+# @name CreateReservaSobreEmbarcacionDeSocio
+POST http://localhost:3000/api/reservasEmbarcacionClub
+Content-Type: application/json
+
+{
+  "embarcacion": {{ownedEmbId}},
+  "fechaInicio": "2025-10-22T09:00:00.000Z",
+  "fechaFin":   "2025-10-22T11:00:00.000Z",
+  "estado": "ACTIVA"
+}
+
+
+### Obtener todas las reservas
+GET http://localhost:3000/api/reservasEmbarcacionClub
+
+
+### Obtener una reserva por id
+GET http://localhost:3000/api/reservasEmbarcacionClub/{{resId}}
+
+
+### Actualizar reserva (mover a horario no solapado, debe pasar)
+# @name UpdateReserva
+PUT http://localhost:3000/api/reservasEmbarcacionClub/{{resId}}
+Content-Type: application/json
+
+{
+  "fechaInicio": "2025-10-20T13:00:00.000Z",
+  "fechaFin":   "2025-10-20T15:00:00.000Z"
+}
+
+
+### Borrar reserva creada
+@idToDelete = {{resId}}
+DELETE http://localhost:3000/api/reservasEmbarcacionClub/{{idToDelete}}
+
+###Obtener reservas por socio
+GET http://localhost:3000/api/reservasEmbarcacionClub/socio/1

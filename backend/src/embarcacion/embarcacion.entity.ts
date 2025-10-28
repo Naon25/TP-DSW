@@ -1,12 +1,14 @@
-import { Entity, Property, ManyToOne, Cascade, Rel } from '@mikro-orm/core';
+
+import { Entity, Property, ManyToOne, Cascade, Rel, OneToMany, Collection,  } from '@mikro-orm/core';
 import { TipoEmbarcacion } from '../tipoEmbarcacion/tipoEmbarcacion.entity.js';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 import { Socio } from '../socio/socio.entity.js';
+import { ReservaEmbarcacionClub } from '../reservaEmbarcacionClub/reservaEmbarcacionClub.entity.js';
 import { IsNotEmpty, IsString, IsNumber, Min, Max, IsPositive, Length } from 'class-validator';
+
 
 @Entity()
 export class Embarcacion extends BaseEntity {
-
   @Property({ nullable: false })
   @IsString({ message: 'El nombre debe ser texto' })
   @IsNotEmpty({ message: 'El nombre es obligatorio' })
@@ -30,7 +32,12 @@ export class Embarcacion extends BaseEntity {
   @IsNotEmpty({ message: 'El tipo de embarcación es obligatorio' })
   tipoEmbarcacion!: TipoEmbarcacion;
 
-  @ManyToOne(() => Socio, { nullable: false })
-  @IsNotEmpty({ message: 'El socio es obligatorio' })
+  @OneToMany(() => ReservaEmbarcacionClub, (reserva) => reserva.embarcacion, {
+    cascade: [Cascade.ALL],
+  })
+  reservasEmbarcacionClub = new Collection<ReservaEmbarcacionClub>(this);
+
+  @ManyToOne(() => Socio, { nullable: true })
   socio!: Rel<Socio>;
 }
+

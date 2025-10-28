@@ -8,6 +8,7 @@ import { boxRouter } from './box/box.routes.js'
 import { amarraRouter } from './amarra/amarra.routes.js'
 import { afiliacionRouter } from './afiliacion/afiliacion.routes.js'
 import { cuotaMensualRouter } from './cuotaMensual/cuotaMensual.routes.js'
+import {reservaEmbarcacionClubRouter} from './reservaEmbarcacionClub/reservaEmbarcacionClub.routes.js'
 import {orm, syncSchema} from './shared/orm.js'
 import { RequestContext } from '@mikro-orm/mysql'
 import { authRouter } from './auth/auth.routes.js'
@@ -35,6 +36,7 @@ app.use('/api/amarras', amarraRouter)
 app.use('/api/afiliaciones', afiliacionRouter)
 app.use('/api/cuotasMensuales', cuotaMensualRouter)
 app.use('/api', authRouter)
+app.use('/api/reservasEmbarcacionClub', reservaEmbarcacionClubRouter)
 
 
 

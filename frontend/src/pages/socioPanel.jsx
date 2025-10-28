@@ -4,7 +4,7 @@ import SocioHome from '../components/SocioHome.jsx';
 import {SocioEmbarcaciones} from '../components/SocioEmbarcaciones.jsx';
 import { SocioCuotas } from '../components/SocioCuotas.jsx';
 import { SocioPerfil } from '../components/SocioPerfil.jsx';
-
+import { SocioReservasEmbarcacion } from './SocioReservasEmbarcacion.jsx';
 
 export function SocioPanel() {
   const [pagina, setPagina] = useState(null);
@@ -49,8 +49,9 @@ useEffect(() => {
         {pagina === 'amarras' && (
           <div>Listado de amarras y boxes (próximamente)</div>
         )}
-        {pagina === 'reservas' && (
-          <div>Reservar embarcaciones (próximamente)</div>
+        {pagina === 'reservas' && socio && (
+          <SocioReservasEmbarcacion idSocio={socio.id} />
+        
         )}
     </>
   );
