@@ -58,7 +58,7 @@ async function validarDuracionYSolapamiento(em: any,inicio: Date, fin: Date,emba
 }
 
 async function findAll(req: Request, res: Response) {
-  const { embarcacionId, fechaInicio, estado } = req.query;
+  const { embarcacionId, fechaInicio, estado, socio } = req.query;
 
   const filters: any = {};
 
@@ -70,6 +70,9 @@ async function findAll(req: Request, res: Response) {
   }
   if (estado) {
     filters.estado = estado;
+  }
+  if (socio) {
+    filters.socio = { id: Number(socio) };
   }
 
   try {

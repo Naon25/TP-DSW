@@ -37,6 +37,11 @@ export default function AdminHome({onSeleccion}) {
       link: '/reservas',
       desc: 'Controla las reservas de boxes y amarras',
     },
+    {title: 'Reservas Embarcación Club',
+      icon: cilCalendar,
+      link: 'reservasEmbarcacionClub',
+      desc: 'Gestiona las reservas de embarcaciones del club',
+    },
   ];
 
   return (
