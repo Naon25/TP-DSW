@@ -1,17 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
 import { orm } from '../shared/orm.js';
 import { Afiliacion } from './afiliacion.entity.js';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
 
 const em = orm.em;
 
-function sanitizeAfiliacionInput(req: Request, res: Response, next: NextFunction){
-  req.body.sanitizedInput ={
+function sanitizeAfiliacionInput(req: Request, res: Response, next: NextFunction) {
+  req.body.sanitizedInput = {
     fechaInicio: req.body.fechaInicio,
     fechaFin: req.body.fechaFin,
     tipo: req.body.tipo,
     socio: req.body.socio,
-  }
-  //mas validaciones si es necesario
+  };
+  
   Object.keys(req.body.sanitizedInput).forEach((key) => {
     if (req.body.sanitizedInput[key] === undefined) { 
       delete req.body.sanitizedInput[key];
@@ -21,32 +23,44 @@ function sanitizeAfiliacionInput(req: Request, res: Response, next: NextFunction
 }
 
 async function findAll(req: Request, res: Response) {
-  try{
-    const afiliaciones = await em.find(Afiliacion, {}, {populate: ['socio'] }); 
-    res.status(200).json({message: 'found all afiliaciones', data: afiliaciones});
-  }catch (error:any) {
-    res.status(500).send({ message: error.message });
+  try {
+    const afiliaciones = await em.find(Afiliacion, {}, { populate: ['socio'] }); 
+    res.status(200).json({ message: 'Todas las afiliaciones encontradas', data: afiliaciones });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 }
 
 async function findOne(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const afiliacion = await em.findOneOrFail(Afiliacion, { id }, {populate: ['socio'] });
-    res.status(200).json({message: 'found afiliacion', data: afiliacion});
+    const afiliacion = await em.findOneOrFail(Afiliacion, { id }, { populate: ['socio'] });
+    res.status(200).json({ message: 'Afiliación encontrada', data: afiliacion });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
-    
+    if (error.name === 'NotFoundError') {
+      res.status(404).json({ message: 'Afiliación no encontrada' });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
   }
 }
 
 async function add(req: Request, res: Response) {
-  try{
+  try {
+    // Validar datos antes de crear la afiliación
+    const afiliacionInstance = plainToInstance(Afiliacion, req.body.sanitizedInput);
+    const errors = await validate(afiliacionInstance);
+
+    if (errors.length > 0) {
+      const messages = errors.map((err) => Object.values(err.constraints || {})).flat();
+      return res.status(400).json({ message: 'Error de validación', errors: messages });
+    }
+
     const afiliacion = em.create(Afiliacion, req.body.sanitizedInput);
     await em.flush();
-    res.status(201).json({message: 'Afiliacion created', data: afiliacion});
-  }catch (error:any) {
-    return res.status(400).send({ message: error.message });
+    res.status(201).json({ message: 'Afiliación creada correctamente', data: afiliacion });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
   }
 }
 
@@ -54,24 +68,41 @@ async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
     const afiliacionToUpdate = await em.findOneOrFail(Afiliacion, { id });
+
+    // Validar datos nuevos
+    const afiliacionInstance = plainToInstance(Afiliacion, req.body.sanitizedInput);
+    const errors = await validate(afiliacionInstance, { skipMissingProperties: true });
+
+    if (errors.length > 0) {
+      const messages = errors.map((err) => Object.values(err.constraints || {})).flat();
+      return res.status(400).json({ message: 'Error de validación', errors: messages });
+    }
+
     em.assign(afiliacionToUpdate, req.body.sanitizedInput);
-    em.flush();
-    res.status(200).json({message: 'Afiliacion updated', data: afiliacionToUpdate});
+    await em.flush();
+    res.status(200).json({ message: 'Afiliación actualizada correctamente', data: afiliacionToUpdate });
   } catch (error: any) {
-    return res.status(500).send({ message: error.message });  
+    if (error.name === 'NotFoundError') {
+      res.status(404).json({ message: 'Afiliación no encontrada' });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
   }
 }
 
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const afiliacion = em.getReference(Afiliacion, id);
-    await em.removeAndFlush(afiliacion);
-    res.status(200).json({message: 'Afiliacion removed'});    
+    const afiliacionToRemove = await em.findOneOrFail(Afiliacion, { id });
+    await em.removeAndFlush(afiliacionToRemove);
+    res.status(200).json({ message: 'Afiliación eliminada correctamente' });
   } catch (error: any) {
-    return res.status(500).send({ message: error.message });
+    if (error.name === 'NotFoundError') {
+      res.status(404).json({ message: 'Afiliación no encontrada' });
+    } else {
+      res.status(500).json({ message: error.message });
     }
+  }
 }
 
 export { sanitizeAfiliacionInput, findAll, findOne, add, update, remove };
-
