@@ -1,4 +1,5 @@
-import { Entity, PrimaryKey, Property, OneToMany, Enum  } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, OneToMany, Enum } from '@mikro-orm/core';
+import { IsNotEmpty, IsString, IsNumber, IsEnum} from 'class-validator';
 
 export enum Estado {
   LIBRE = 'libre',
@@ -6,24 +7,29 @@ export enum Estado {
 }
 
 @Entity()
-export class Amarra{
+export class Amarra {
     @PrimaryKey()
-    id?: number
+    id?: number;
 
     @Enum(() => Estado)
-    estado!: Estado
+    @IsEnum(Estado, { message: 'El estado debe ser: libre u ocupado' })
+    @IsNotEmpty({ message: 'El estado es obligatorio' })
+    estado!: Estado;
 
     @Property()
-    precioMensualBase!: number
+    @IsNumber({}, { message: 'El precio mensual debe ser un número' })
+    precioMensualBase!: number;
 
     @Property()
-    longitudMax!: number
+    @IsNumber({}, { message: 'La longitud máxima debe ser un número' })
+    longitudMax!: number;
 
     @Property()
-    zona!: string
+    @IsString({ message: 'La zona debe ser texto' })
+    @IsNotEmpty({ message: 'La zona es obligatoria' })
+    zona!: string;
 
     @Property()
-    nroPilon!: number
-
-
+    @IsNumber({}, { message: 'El número de pilón debe ser un número' })
+    nroPilon!: number;
 }
