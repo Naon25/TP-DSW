@@ -10,3 +10,5 @@ export const eliminarEmbarcacion = (id) => api.delete(`/api/embarcaciones/${id}`
 export const actualizarEmbarcacion = (id, data) => api.put(`/api/embarcaciones/${id}`, data);
 export const getEmbarcacionesPorSocio = (idSocio) =>
   api.get(`/api/embarcaciones/socio/${idSocio}`);
+export const getEmbarcacionesClub = () =>
+  api.get('/api/embarcaciones/club');

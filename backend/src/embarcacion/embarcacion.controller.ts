@@ -89,5 +89,13 @@ async function findBySocio(req: Request, res: Response) {
   }
 }
 
+async function findEmbarcacionesClub(req: Request, res: Response) {
+  try {
+    const embarcaciones = await em.find(Embarcacion, { socio: null }, { populate: ['tipoEmbarcacion'] });
+    res.status(200).json({ message: 'found embarcaciones without socio', data: embarcaciones });
+  } catch (error: any) {
+    res.status(500).send({ message: error.message });
+  }
+}
 
-export { sanitizeEmbarcacionInput, findAll, findOne, add, update, remove, findBySocio };
+export { sanitizeEmbarcacionInput, findAll, findOne, add, update, remove, findBySocio, findEmbarcacionesClub };
