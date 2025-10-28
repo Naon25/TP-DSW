@@ -4,12 +4,8 @@ import { Afiliacion } from '../afiliacion/afiliacion.entity.js';
 import { CuotaMensual } from '../cuotaMensual/cuotaMensual.entity.js';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 import bcrypt from 'bcrypt';
-<<<<<<< HEAD
 import { ReservaEmbarcacionClub } from '../reservaEmbarcacionClub/reservaEmbarcacionClub.entity.js';
-=======
 import {IsEmail, IsNotEmpty, Length, IsString, IsNumberString} from 'class-validator';
-
->>>>>>> main
 @Entity()
 export class Socio extends BaseEntity {
   @Property()
