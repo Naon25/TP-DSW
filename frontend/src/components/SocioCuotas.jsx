@@ -36,7 +36,7 @@ export function SocioCuotas({ idSocio }) {
         {cuotas.slice().reverse().map((cuota) => (
           <div key={cuota.id} className="col-md-6 mb-4">
             <div className="card socio-card shadow-sm p-3">
-              <h5 className="mb-2">Mes: {new Date(cuota.fechaVencimiento).toLocaleDateString()}</h5>
+              <h5 className="mb-2">Vencimiento: {new Date(cuota.fechaVencimiento).toLocaleDateString()}</h5>
               <p className="mb-1"><strong>Monto:</strong> ${cuota.monto}</p>
               <p className="mb-1">
                 <strong>Estado:</strong>{' '}

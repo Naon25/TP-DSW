@@ -14,13 +14,13 @@ Content-Type: application/json
 }
 
 ### ID
-@id = {{createAdministrador.response.body.data.id}}
+@administradorId = {{createAdministrador.response.body.data.id}}
 
 ###GET ONE
-GET http://localhost:3000/api/administradores/{{id}}
+GET http://localhost:3000/api/administradores/{{administradorId}}
 
 ### modificar a administrador
-PUT http://localhost:3000/api/administradores/{{id}}
+PUT http://localhost:3000/api/administradores/{{administradorId}}
 Content-Type: application/json
 
 {
@@ -28,6 +28,5 @@ Content-Type: application/json
   "password": "123456789"
 }
 
-
 ### borrar a administrador
-DELETE http://localhost:3000/api/administradores/{{id}}
+DELETE http://localhost:3000/api/administradores/{{administradorId}}
