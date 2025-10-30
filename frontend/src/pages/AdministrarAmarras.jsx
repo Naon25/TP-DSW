@@ -74,47 +74,72 @@ export default function AdministrarAmarras(){
           <CForm onSubmit={handleCrear}>
             <CRow className="mb-3">
               <CCol md={3}>
-                <CFormInput
-                  label="Estado"
-                  placeholder="Estado"
-                  value={estado}
-                  onChange={(e) => setEstado(e.target.value)}
-                  required
-                />
+                <div className="mb-3">
+                  <label className="form-label">Estado</label>
+                  <select
+                    className="form-select"
+                    value={estado}
+                    onChange={(e) => setEstado(e.target.value)}
+                    required
+                  >
+                    <option value="">Seleccione un estado</option>
+                    <option value="libre">Libre</option>
+                    <option value="ocupado">Ocupado</option>
+                  </select>
+                </div>
               </CCol>
               <CCol md={3}>
-                <CFormInput
-                  label="Precio Mensual"
-                  placeholder="Precio Mensual"
-                  value={precioMensualBase}
-                  onChange={(e) => setPrecioMensualBase(Number(e.target.value))}
-                  required
-                />
+                <div className="mb-3">
+                  <label className="form-label">Precio Mensual</label>
+                  <CFormInput
+                    type="number"
+                    placeholder="Precio Mensual"
+                    value={precioMensualBase}
+                    onChange={(e) => setPrecioMensualBase(Number(e.target.value))}
+                    required
+                  />
+                </div>
               </CCol>
               <CCol md={3}>
-                <CFormInput
-                  label="Longitud Maxima"
-                  placeholder="Ingrese la longitud maxima en metros"
-                  value={longitudMax}
-                  onChange={(e) => setLongitudMax(Number(e.target.value))}
-                  required
-                />
+                <div className="mb-3">
+                  <label className="form-label">Longitud Maxima</label>
+                  <CFormInput
+                    type="number"
+                    placeholder="Longitud máxima en metros"
+                    value={longitudMax}
+                    onChange={(e) => setLongitudMax(Number(e.target.value))}
+                    required
+                  />
+                </div>
               </CCol>
               <CCol md={3}>
-                <CFormInput
-                  label="Zona"
-                  placeholder="Ingrese la zona(Norte / Sur)"
-                  value={zona}
-                  onChange={(e) => setZona(e.target.value)}
-                />
+                <div className="mb-3">
+                  <label className="form-label">Zona</label>
+                  <select
+                    className="form-select"
+                    value={zona}
+                    onChange={(e) => setZona(e.target.value)}
+                    required
+                  >
+                    <option value="">Seleccione una zona</option>
+                    <option value="Norte">Norte</option>
+                    <option value="Sur">Sur</option>
+                    <option value="Este">Este</option>
+                    <option value="Oeste">Oeste</option>
+                  </select>
+                </div>
               </CCol>
               <CCol md={3}>
-                <CFormInput
-                  label="Nro Pilon"
-                  placeholder="Ingrese el nro del Pilon"
-                  value={nroPilon}
-                  onChange={(e) => setNroPilon(Number(e.target.value))}
-                />
+                <div className="mb-3">
+                  <label className="form-label">Nro Pilon</label>
+                  <CFormInput
+                    type="number"
+                    placeholder="Número de pilón"
+                    value={nroPilon}
+                    onChange={(e) => setNroPilon(Number(e.target.value))}
+                    required
+                  />
+                </div>
               </CCol>
             </CRow>
             <CButton color="primary" type="submit">

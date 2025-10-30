@@ -56,8 +56,14 @@ export default function AdministrarBoxes(){
 
   const handleEditar = async (id, datosActualizados) => {
     try {
-      await actualizarBox(id, datosActualizados);
-      console.log('Editar box ID:', id, 'con datos:', datosActualizados);
+      // Convertir campos numéricos
+      const datosProcesados = {
+        ...datosActualizados,
+        nroBox: String(datosActualizados.nroBox),
+        precioMensualBase: Number(datosActualizados.precioMensualBase)
+      };
+      await actualizarBox(id, datosProcesados);
+      console.log('Editar box ID:', id, 'con datos:', datosProcesados);
       cargarBoxes();
     } catch (error) {
       console.error('Error al editar box:', error);

@@ -1,19 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/boxes';
+const api = axios.create({
+  baseURL: 'http://localhost:3000',
+});
 
-export const getBoxes = () => {
-  return axios.get(API_URL);
-};
-
-export const crearBox = (boxData) => {
-  return axios.post(API_URL, boxData);
-};
-
-export const eliminarBox = (id) => {
-  return axios.delete(`${API_URL}/${id}`);
-};
-
-export const actualizarBox = (id, boxData) => {
-  return axios.put(`${API_URL}/${id}`, boxData);
-};
+export const getBoxes = () => api.get('/api/boxes');
+export const crearBox = (boxData) => api.post('/api/boxes', boxData);
+export const eliminarBox = (id) => api.delete(`/api/boxes/${id}`);
+export const actualizarBox = (id, boxData) => api.put(`/api/boxes/${id}`, boxData);

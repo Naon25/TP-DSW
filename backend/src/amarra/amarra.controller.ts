@@ -10,10 +10,10 @@ em.getRepository(Amarra);
 function sanitizeAmarraInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     estado: req.body.estado,
-    precioMensualBase: req.body.precioMensualBase,
-    longitudMax: req.body.longitudMax,
+    precioMensualBase: Number(req.body.precioMensualBase),
+    longitudMax: Number(req.body.longitudMax),
     zona: req.body.zona,
-    nroPilon: req.body.nroPilon,
+    nroPilon: Number(req.body.nroPilon),
   };
   
   Object.keys(req.body.sanitizedInput).forEach((key) => {

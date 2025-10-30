@@ -7,8 +7,8 @@ import { validate } from 'class-validator';
 function sanitizeBoxInput(req: Request, res: Response, next: NextFunction) {
   req.body.sanitizedInput = {
     estado: req.body.estado,
-    nroBox: req.body.nroBox,
-    precioMensualBase: req.body.precioMensualBase,
+    nroBox: Number(req.body.nroBox),
+    precioMensualBase: Number(req.body.precioMensualBase),
   };
   
   Object.keys(req.body.sanitizedInput).forEach((key) => {
@@ -19,8 +19,10 @@ function sanitizeBoxInput(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
+const em = orm.em;
+em.getRepository(Box);
+
 async function findAll(req: Request, res: Response) {
-  const em = orm.em.fork();
   try {
     const { estado } = req.query;
     const where: any = {};
@@ -83,21 +85,26 @@ async function add(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
   try {
-    const em = orm.em.fork();
     const id = Number.parseInt(req.params.id);
     const boxToUpdate = await em.findOneOrFail(Box, { id });
 
-    // Validar datos nuevos
-    const boxInstance = plainToInstance(Box, req.body);
+    // Sanitizar y validar datos nuevos
+    req.body.sanitizedInput = {
+      estado: req.body.estado,
+      nroBox: String(req.body.nroBox),
+      precioMensualBase: Number(req.body.precioMensualBase)
+    };
+
+    const boxInstance = plainToInstance(Box, req.body.sanitizedInput);
     const errors = await validate(boxInstance, { skipMissingProperties: true });
 
     if (errors.length > 0) {
       const messages = errors.map((err) => Object.values(err.constraints || {})).flat();
       return res.status(400).json({ message: 'Error de validación', errors: messages });
     }
-
-    em.assign(boxToUpdate, req.body);
-    await em.persistAndFlush(boxToUpdate);
+    
+    em.assign(boxToUpdate, req.body.sanitizedInput);
+    await em.flush();
     res.status(200).json({ message: 'Box actualizado correctamente', data: boxToUpdate });
   } catch (error: any) {
     if (error.name === 'NotFoundError') {
