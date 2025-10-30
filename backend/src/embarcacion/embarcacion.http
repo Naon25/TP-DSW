@@ -50,3 +50,7 @@ Content-Type: application/json
 @idToDelete = {{createEmbarcacionToDelete.response.body.data.id}}
 
 DELETE http://localhost:3000/api/embarcaciones/{{idToDelete}}
+
+
+###GET Embarcaciones sin socio (del club)
+GET http://localhost:3000/api/embarcaciones/club

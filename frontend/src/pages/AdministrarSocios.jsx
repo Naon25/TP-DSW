@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getSocios, crearSocio, eliminarSocio, actualizarSocio } from '../api/socios.js';
+import { getSocios, crearSocio, actualizarSocio, bajaLogicaSocio } from '../api/socios.js';
 import { TablaSocios } from '../components/tablaSocios.jsx';
 import { EntityTable } from '../components/TablaGenerica.jsx';
 import {
@@ -12,14 +12,18 @@ import {
   CFormInput,
   CButton,
 } from '@coreui/react';
+import { crearAfiliacion } from '../api/afiliaciones.js';
 
 export default function AdministrarSocios() {
-  const [socios, setSocios] = useState([]);
+  const [sociosActivos, setSociosActivos] = useState([]);
+  const [sociosInactivos, setSociosInactivos] = useState([]);
   const [nombre, setNombre] = useState('');
   const[apellido, setApellido] = useState('');
   const [dni, setDni] = useState('');
   const [telefono, setTelefono] = useState('');
   const [email, setEmail] = useState('');
+
+  const [tipoAfiliacion, setTipoAfiliacion] = useState('');
 
   useEffect(() => {
     cargarSocios();
@@ -27,41 +31,66 @@ export default function AdministrarSocios() {
 
   const cargarSocios = async () =>{
     const res = await getSocios();
-    setSocios(res.data.data);
+    const sociosData = res.data.data;
+
+    const activos = sociosData.filter((s) => Array.isArray(s.afiliaciones) && s.afiliaciones.some(a => a && a.fechaFin === null));
+    const inactivos = sociosData.filter((s) => !Array.isArray(s.afiliaciones) || !s.afiliaciones.some(a => a && a.fechaFin === null));
+    setSociosActivos(activos);
+    setSociosInactivos(inactivos);
+
+    console.log('Socios cargados:', sociosData);
+    console.log('Socios activos:', activos);
   };
 
-  const handleCrear = async (e) => {
-    e.preventDefault();
-    await crearSocio({ nombre, apellido, dni, telefono, email });
-    await cargarSocios();
-    setNombre('');
-    setApellido('');
-    setDni('');
-    setTelefono('');
-    setEmail('');
-  };
+const handleCrear = async (e) => {
+  try {
+  e.preventDefault();
 
-  const handleEliminar = async (id) => {
-    try {
-      await eliminarSocio(id); 
-      cargarSocios();
-    } catch (error) {
-      console.error('Error al eliminar socio', error);
-      const message = error.response?.data?.message || '';
-
-      if (message.includes('foreign key') || message.includes('Cannot delete or update a parent row')) {
-        alert('No se puede eliminar este socio porque tiene embarcaciones asociadas.');
-      } else {
-        alert('Ocurrió un error al eliminar el socio.');
-      }
-  };
+  if (!tipoAfiliacion.trim()) {
+    alert('Debés seleccionar un tipo de afiliación válido.');
+    return;
   }
+
+  const socioResp = await crearSocio({ nombre, apellido, dni, telefono, email });
+  const socioId = socioResp.data.data.id;
+
+  await crearAfiliacion({
+    fechaInicio: new Date(),
+    fechaFin: null,
+    tipo: tipoAfiliacion,
+    socio: socioId,
+  });
+
+  await cargarSocios();
+  setNombre('');
+  setApellido('');
+  setDni('');
+  setTelefono('');
+  setEmail('');
+  setTipoAfiliacion('');
+}
+catch (error) {
+  console.log('Error al crear socio y afiliación', error.response?.data);
+}
+};
+
+
+  
   const handleEditar = async (id, socioEditar) => {
     try {
       await actualizarSocio(id, socioEditar);
       cargarSocios();
     } catch (error) {
       alert('Error al actualizar socio', error);
+    }
+  };
+
+  const handleBajaLogica = async (id) => {
+    try {
+      await bajaLogicaSocio(id);
+      cargarSocios();
+    } catch (error) {
+      alert('Error al dar de baja lógica al socio', error);
     }
   };
 
@@ -118,6 +147,18 @@ export default function AdministrarSocios() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </CCol>
+              <CCol md={3}>
+                <label className="form-label">Tipo de Afiliación</label>
+                <select
+                  className="form-select"
+                  value={tipoAfiliacion}
+                  onChange={(e) => setTipoAfiliacion(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>Seleccione un tipo</option>
+                  <option value="Básica">Básica</option>
+                </select>
+              </CCol>
             </CRow>
             <CButton color="primary" type="submit">
               Crear Socio
@@ -127,6 +168,11 @@ export default function AdministrarSocios() {
       </CCard>
 
       <div className="mt-4">
+        <CCard className="mb-4">
+        <CCardHeader>
+          <h4>Socios Activos</h4>
+        </CCardHeader>
+        <CCardBody>
         <EntityTable
           entityName="socio"
           columns={[
@@ -137,11 +183,34 @@ export default function AdministrarSocios() {
             { key: 'email', label: 'E-Mail' },
             { key: 'telefono', label: 'Teléfono' },
           ]}
-          data={socios}
-          onDelete={handleEliminar}
+          data={sociosActivos}
+          onDelete={handleBajaLogica}
           onEdit={handleEditar}
         />
+        </CCardBody>
+      </CCard>
       </div>
+      <CCard className="mt-4">
+        <CCardHeader>
+          <h4>Socios Inactivos</h4>
+        </CCardHeader>
+        <CCardBody>
+          <EntityTable
+            entityName="socio"
+            columns={[
+              { key: 'id', label: 'ID' },
+              { key: 'nombre', label: 'Nombre' },
+              { key: 'apellido', label: 'Apellido' },
+              { key: 'dni', label: 'DNI' },
+              { key: 'email', label: 'E-Mail' },
+              { key: 'telefono', label: 'Teléfono' },
+            ]}
+            data={sociosInactivos}
+            onDelete={handleBajaLogica}
+            onEdit={handleEditar}
+          />
+        </CCardBody>
+      </CCard>
     </div>
   );
 }

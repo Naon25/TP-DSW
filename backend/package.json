@@ -12,20 +12,42 @@
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.7.1",
-"dependencies": {
-  "@mikro-orm/core": "6.4.16",
-  "@mikro-orm/mysql": "6.4.16",
-  "@mikro-orm/sql-highlighter": "1.0.1",
-  "cors": "^2.8.5",
-  "dotenv": "^17.2.0",
-  "express": "4.18.2",
-  "mysql2": "3.14.2",
-  "reflect-metadata": "0.2.2"
-},
+  "dependencies": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+    "dotenv": "^17.2.0",
+    "express": "4.18.2",
+    "mysql2": "3.14.2"
+=======
+    "@mikro-orm/core": "6.4.16",
+    "@mikro-orm/mysql": "6.4.16",
+    "@mikro-orm/sql-highlighter": "1.0.1",
+    "express": "^4.18.2",
+    "reflect-metadata": "0.2.2"
+>>>>>>> admin
+=======
+    "@mikro-orm/core": "6.4.16",
+    "@mikro-orm/mysql": "6.4.16",
+    "@mikro-orm/sql-highlighter": "1.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "4.18.2",
+    "mysql2": "3.14.2",
+    "reflect-metadata": "0.2.2"
+>>>>>>> ec1260dfa247cca291c06ef0967bf2aee0387af3
+  },
   "devDependencies": {
+    "@mikro-orm/cli": "^6.5.2",
+    "@mikro-orm/core": "^6.5.2",
+    "@mikro-orm/migrations": "^6.5.2",
+    "@mikro-orm/mysql": "^6.5.2",
+    "@mikro-orm/seeder": "^6.5.2",
+    "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
-    "@types/express": "^4.17.17",
+    "@types/express": "4.17.17",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "22.15.30",
+    "ts-node": "^10.9.2",
     "tsc-watch": "7.1.1",
     "typescript": "5.8.3"
   }

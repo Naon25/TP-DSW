@@ -1,0 +1,145 @@
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem 4rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Logo con imagen */
+.navbar-logo {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo-image {
+  height: 50px; /* Ajusta según necesites */
+  width: auto;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.logo-image:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.navbar-links-container {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+  margin-right: 2rem;
+}
+
+.navbar-links-container a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  position: relative;
+}
+
+.navbar-links-container a:hover {
+  color: #00c4ff;
+  transform: translateY(-2px);
+}
+
+.navbar-links-container a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #00c4ff;
+  transition: width 0.3s ease;
+}
+
+.navbar-links-container a:hover::after {
+  width: 100%;
+}
+
+.logbtn {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 0.8rem 2rem;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 400;
+  min-width: 120px;
+}
+
+.logbtn:hover {
+  color: #00c4ff;
+  transform: translateY(-2px);
+}
+
+.navbar-menu-container { 
+  display: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  nav {
+    padding: 1.5rem 3rem;
+  }
+  
+  .logo-image {
+    height: 45px;
+  }
+  
+  .navbar-links-container {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: 1.2rem 2rem;
+    justify-content: space-between;
+  }
+  
+  .logo-image {
+    height: 40px;
+  }
+  
+  .navbar-links-container {
+    display: none;
+  }
+  
+  .navbar-menu-container {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    padding: 1rem 1.5rem;
+  }
+  
+  .logo-image {
+    height: 35px;
+  }
+}
