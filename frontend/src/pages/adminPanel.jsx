@@ -14,7 +14,7 @@ import { AdminPerfil } from '../components/AdminPerfil.jsx';
 import { AdministrarReservasEmbarcacionClub } from './AdministrarReservasEmbarcacionClub.jsx';
 import ListarAmarras from './ListarAmarras.jsx';
 import ListarBoxes from './ListarBoxes.jsx';
-import { AdministrarEmbarcacionesSocios } from './AdministrarEmbarcacionesSocios.jsx';
+import AdministrarEmbarcacionesSocios from './AdministrarEmbarcacionesSocios.jsx';
 import { MenuAdminEmbarcaciones } from '../components/MenuAdminEmbarcaciones.jsx';
 import AdministrarTiposEmbarcacion from './AdministrarTiposEmbarcacion.jsx';
 

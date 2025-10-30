@@ -6,7 +6,7 @@ import { SocioCuotas } from '../components/SocioCuotas.jsx';
 import { SocioPerfil } from '../components/SocioPerfil.jsx';
 import { SocioReservasEmbarcacion } from './SocioReservasEmbarcacion.jsx';
 import {SocioHome2} from '../components/SocioHome2.jsx';
-import { SocioAfiliaciones } from './SocioAfiliaciones';
+import { SocioAfiliaciones } from './SocioAfiliaciones.tsx';
 
 export function SocioPanel() {
   const [pagina, setPagina] = useState(null);
