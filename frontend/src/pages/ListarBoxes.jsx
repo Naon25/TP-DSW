@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { getBoxes } from '../api/boxes.js';
 import { EntityTable } from '../components/TablaGenerica.jsx';
 import { CCard, CCardBody, CCardHeader, CRow, CCol } from '@coreui/react';
@@ -14,7 +14,7 @@ export default function ListarBoxes() {
 
   useEffect(() => {
     filtrarBoxes();
-  }, [boxes, filtroEstado]);
+  }, [filtrarBoxes]);
 
   const cargarBoxes = async () => {
     try {
@@ -25,13 +25,13 @@ export default function ListarBoxes() {
     }
   };
 
-  const filtrarBoxes = () => {
+  const filtrarBoxes = useCallback(() => {
     if (filtroEstado === 'todos') {
       setBoxesFiltrados(boxes);
     } else {
       setBoxesFiltrados(boxes.filter(box => box.estado === filtroEstado));
     }
-  };
+  }, [filtroEstado, boxes]);
 
   return (
     <div className="p-4">
