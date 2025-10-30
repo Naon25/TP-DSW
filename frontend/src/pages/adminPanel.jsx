@@ -11,8 +11,13 @@ import AdminHome from '../components/AdminHome.jsx';
 import { AdministrarCuotas } from './AdministrarCuotas.jsx'
 import { AdministrarAfiliaciones} from './AdministrarAfiliaciones.jsx'
 import { AdminPerfil } from '../components/AdminPerfil.jsx';
+import { AdministrarReservasEmbarcacionClub } from './AdministrarReservasEmbarcacionClub.jsx';
 import ListarAmarras from './ListarAmarras.jsx';
 import ListarBoxes from './ListarBoxes.jsx';
+import AdministrarEmbarcacionesSocios from './AdministrarEmbarcacionesSocios.jsx';
+import { MenuAdminEmbarcaciones } from '../components/MenuAdminEmbarcaciones.jsx';
+import AdministrarTiposEmbarcacion from './AdministrarTiposEmbarcacion.jsx';
+
 // importá otros componentes cuando los tengas
 
 export function AdminPanel() {
@@ -55,12 +60,14 @@ console.log('🔍 Render condicional: pagina =', pagina, ', admin =', admin);
         {pagina === 'administrarCuotas' && <AdministrarCuotas/>}
         {pagina === 'administrarAfiliaciones' && <AdministrarAfiliaciones/>}
 
-        {pagina === 'embarcaciones' && (
-          <div>Gestión de embarcaciones (próximamente)</div>
-        )}
+        {pagina === 'embarcaciones' && (<MenuAdminEmbarcaciones onSeleccion={handleSeleccion} />)}
+        {pagina === 'embarcacionesDeSocios' && <AdministrarEmbarcacionesSocios/>}
+        {pagina === 'tiposEmbarcacion' && <AdministrarTiposEmbarcacion/>}
 
         {pagina === 'amarras' && <MenuAdminAmarras onSeleccion={handleSeleccion}/>}
         {pagina === 'administrarAmarras' && <AdministrarAmarras/>}
+
+        {pagina === 'reservasEmbarcacionClub' && <AdministrarReservasEmbarcacionClub />}
         {pagina === 'listarAmarras' && <ListarAmarras/>}
 
         {pagina === 'boxes' && <MenuAdminBox onSeleccion={handleSeleccion}/>}

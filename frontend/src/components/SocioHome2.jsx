@@ -8,8 +8,6 @@ import {
   CCol,
 } from '@coreui/react';
 import {
-  cilPeople,
-  cilPool,
   cilBoatAlt,
   cilCalendar,
   cilAddressBook,
@@ -18,26 +16,8 @@ import {
 import CIcon from '@coreui/icons-react';
 import './AdminHome.css';
 
-export default function AdminHome({onSeleccion}) {
+export function SocioHome2({onSeleccion}) {
   const modules = [
-    {
-      title: 'Socios',
-      icon: cilPeople,
-      link: 'socios',
-      desc: 'Gestiona socios y sus datos',
-    },
-    {
-      title: 'Amarras',
-      icon: cilPool,
-      link: 'amarras',
-      desc: 'Administra amarras y disponibilidad',
-    },
-    {
-      title: 'Boxes',
-      icon: cilStorage,
-      link: 'boxes',
-      desc: 'Administra boxes y disponibilidad',
-    },
     {
       title: 'Embarcaciones',
       icon: cilBoatAlt,
@@ -45,10 +25,16 @@ export default function AdminHome({onSeleccion}) {
       desc: 'Gestiona embarcaciones de los socios, tipos y más',
     },
     {
-      title: 'Alquileres Amarras/Boxes',
+      title: 'Cuotas',
       icon: cilAddressBook,
-      link: '/reservas',
-      desc: 'Controla los alquileres de boxes y amarras',
+      link: 'cuotas',
+      desc: 'Controla tus cuotas y pagos',
+    },
+    {
+      title: 'Afiliaciones',
+      icon: cilBoatAlt,
+      link: 'afiliaciones',
+      desc: 'Gestiona tus afiliaciones al club',
     },
     {
       title: 'Reservas Embarcación Club',
@@ -56,11 +42,17 @@ export default function AdminHome({onSeleccion}) {
       link: 'reservasEmbarcacionClub',
       desc: 'Gestiona las reservas de embarcaciones del club',
     },
+    {
+      title: 'Alquileres Amarras/Boxes',
+      icon: cilStorage,
+      link: 'amarras',
+      desc: 'Controla los alquileres de boxes y amarras',
+    },
   ];
 
   return (
     <div className="admin-container">
-      <h1 className="admin-title">Panel de Administración</h1>
+      <h1 className="admin-title">Panel de Socio</h1>
       <p className="admin-subtitle">
         Selecciona una funcionalidad para comenzar
       </p>
