@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Socio } from './socio.entity.js';
 import { orm } from '../shared/orm.js';
 import { Afiliacion } from '../afiliacion/afiliacion.entity.js';
+import { Embarcacion } from '../embarcacion/embarcacion.entity.js';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 
@@ -133,4 +134,50 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeSocioInput, findAll, findOne, add, update, remove };
+async function bajaLogica(req: Request, res: Response) {
+  const id = Number(req.params.id);
+
+  try {
+    const result = await em.transactional(async (em1) => {
+      //  socio + afiliación activa
+      const socio = await em1.findOne(Socio, { id });
+      if (!socio) {
+        return res.status(404).json({ message: 'Socio no encontrado' });
+      }
+
+      const afiliacionActiva = await em1.findOne(Afiliacion, {
+        socio: id,
+        fechaFin: null,
+      });
+      if (!afiliacionActiva) {
+        return res.status(400).json({ message: 'El socio no tiene una afiliación activa' });
+      }
+
+      //  cerrar afiliación
+      afiliacionActiva.fechaFin = new Date();
+      await em1.persist(afiliacionActiva);
+
+      //  obtener embarcaciones del socio
+      const embarcaciones = await em1.find(Embarcacion, { socio: id });
+
+      // 4) eliminar embarcaciones (si existen)
+      for (const e of embarcaciones) {
+        em1.remove(e);
+      }
+
+      await em1.flush();
+
+    });
+
+    return res.status(200).json({
+      message: 'Baja lógica realizada y embarcaciones eliminadas',
+      data: result,
+    });
+  } catch (error: any) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error en la baja lógica', error: error.message });
+  }
+}
+
+
+export { sanitizeSocioInput, findAll, findOne, add, update, remove, bajaLogica };

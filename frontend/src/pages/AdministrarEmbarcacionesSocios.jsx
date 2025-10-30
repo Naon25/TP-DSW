@@ -17,6 +17,7 @@ import { getSocios } from '../api/socios.js'
 import {
   getEmbarcacionesPorSocio,
   crearEmbarcacion,
+  eliminarEmbarcacion
 } from '../api/embarcaciones.js'
 import { getTiposEmbarcacion } from '../api/tiposEmbarcacion.js' 
 
@@ -87,6 +88,21 @@ export const AdministrarEmbarcacionesSocios = () => {
     }
   }
 
+  const borrarEmbarcacion = async (idEmbarcacion) => {
+    try {
+      await eliminarEmbarcacion(idEmbarcacion)
+      setEmbarcacionesPorSocio((prev) => {
+        const newState = { ...prev }
+        for (const key in newState) {
+          newState[key] = newState[key].filter((e) => e.id !== idEmbarcacion)
+        }
+        return newState
+      })
+    } catch (error) {
+      console.error('Error al eliminar embarcación:', error)
+    }
+  }
+
   // Modal nueva embarcación
   const abrirModalNueva = (socioId) => {
     setSocioSeleccionado(socioId)
@@ -147,7 +163,7 @@ export const AdministrarEmbarcacionesSocios = () => {
       <CSmartTable
         columns={columns}
         items={sociosConNombreCompleto}
-        itemsPerPage={6}
+        itemsPerPage={20}
         pagination
         sorter
         scopedColumns={{
@@ -194,6 +210,7 @@ export const AdministrarEmbarcacionesSocios = () => {
                           <th>Matrícula</th>
                           <th>Eslora</th>
                           <th>Tipo</th>
+                          <th>Acciones</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -203,6 +220,15 @@ export const AdministrarEmbarcacionesSocios = () => {
                             <td>{e.matricula}</td>
                             <td>{e.eslora}</td>
                             <td>{e.tipoEmbarcacion?.nombre ?? '---'}</td>
+                            <td>
+                              <CButton
+                                color="danger"
+                                size="sm"
+                                onClick={() => borrarEmbarcacion(e.id)}
+                              >
+                                Eliminar
+                              </CButton>
+                            </td>
                           </tr>
                         ))}
                       </tbody>

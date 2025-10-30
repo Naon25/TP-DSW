@@ -7,7 +7,14 @@ import {
   CRow,
   CCol,
 } from '@coreui/react';
-import { cilPeople, cilPool, cilBoatAlt, cilCalendar } from '@coreui/icons';
+import {
+  cilPeople,
+  cilPool,
+  cilBoatAlt,
+  cilCalendar,
+  cilAddressBook,
+  cilStorage,
+} from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import './AdminHome.css';
 
@@ -26,18 +33,25 @@ export default function AdminHome({onSeleccion}) {
       desc: 'Administra amarras y disponibilidad',
     },
     {
+      title: 'Boxes',
+      icon: cilStorage,
+      link: 'boxes',
+      desc: 'Administra boxes y disponibilidad',
+    },
+    {
       title: 'Embarcaciones',
       icon: cilBoatAlt,
       link: 'embarcaciones',
-      desc: 'Gestiona embarcaciones de los socios',
+      desc: 'Gestiona embarcaciones de los socios, tipos y más',
     },
     {
-      title: 'Reservas',
-      icon: cilCalendar,
+      title: 'Alquileres Amarras/Boxes',
+      icon: cilAddressBook,
       link: '/reservas',
-      desc: 'Controla las reservas de boxes y amarras',
+      desc: 'Controla los alquileres de boxes y amarras',
     },
-    {title: 'Reservas Embarcación Club',
+    {
+      title: 'Reservas Embarcación Club',
       icon: cilCalendar,
       link: 'reservasEmbarcacionClub',
       desc: 'Gestiona las reservas de embarcaciones del club',

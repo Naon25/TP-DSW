@@ -1,11 +1,24 @@
-import {Entity, Property, OneToMany, Collection, BeforeCreate} from '@mikro-orm/core';
+import {
+  Entity,
+  Property,
+  OneToMany,
+  Collection,
+  BeforeCreate,
+} from '@mikro-orm/core';
 import { Embarcacion } from '../embarcacion/embarcacion.entity.js';
 import { Afiliacion } from '../afiliacion/afiliacion.entity.js';
 import { CuotaMensual } from '../cuotaMensual/cuotaMensual.entity.js';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 import bcrypt from 'bcrypt';
 import { ReservaEmbarcacionClub } from '../reservaEmbarcacionClub/reservaEmbarcacionClub.entity.js';
-import {IsEmail, IsNotEmpty, Length, IsString, IsNumberString} from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  Length,
+  IsString,
+  IsNumberString,
+  IsOptional,
+} from 'class-validator';
 @Entity()
 export class Socio extends BaseEntity {
   @Property()
@@ -33,6 +46,7 @@ export class Socio extends BaseEntity {
   telefono!: string;
 
   @Property()
+  @IsOptional()
   @IsString()
   @Length(6, 100, { message: 'La contraseña debe tener al menos 6 caracteres' })
   password!: string;
@@ -55,5 +69,10 @@ export class Socio extends BaseEntity {
       const rawPassword = this.dni.slice(-6);
       this.password = await bcrypt.hash(rawPassword, 10);
     }
+  }
+  get activo(): boolean {
+    return this.afiliaciones.getItems().some(
+      (afiliacion) => !afiliacion.fechaFin,
+    );
   }
 }

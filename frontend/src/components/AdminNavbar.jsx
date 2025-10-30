@@ -78,7 +78,18 @@ export function AdminNavbar({ onSeleccion, paginaActual }) {
                 Boxes
               </CNavLink>
             </CNavItem>
+            <CNavItem>
+              <CNavLink
+                active={paginaActual === 'reservasEmbarcacionClub'}
+                href="#"
+                onClick={() => onSeleccion('reservasEmbarcacionClub')}
+                style={{ color: 'white' }}
+              >
+                Reservas Embarcación Club
+              </CNavLink>
+            </CNavItem>
           </CNavbarNav>
+          
         </div>
 
         {/* Derecha: botón logout */}

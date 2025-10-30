@@ -23,7 +23,7 @@ export default function SocioHome({ idSocio, onSeleccion }) {
 
     const fetchData = async () => {
       try {
-        const safe = (fn) => fn.catch(() => ({ data: { data: [] } }))
+        const safe = (fn) => fn.catch(() => ({ data: { data: [] } })) 
         const [cuotasRes, afiliacionesRes, embarcacionesRes] = await Promise.all([
           safe(getCuotasPorSocio(idSocio)),
           safe(getAfiliaciones()),

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getSocios, crearSocio, eliminarSocio, actualizarSocio } from '../api/socios.js';
+import { getSocios, crearSocio, actualizarSocio, bajaLogicaSocio } from '../api/socios.js';
 import { TablaSocios } from '../components/tablaSocios.jsx';
 import { EntityTable } from '../components/TablaGenerica.jsx';
 import {
@@ -15,7 +15,8 @@ import {
 import { crearAfiliacion } from '../api/afiliaciones.js';
 
 export default function AdministrarSocios() {
-  const [socios, setSocios] = useState([]);
+  const [sociosActivos, setSociosActivos] = useState([]);
+  const [sociosInactivos, setSociosInactivos] = useState([]);
   const [nombre, setNombre] = useState('');
   const[apellido, setApellido] = useState('');
   const [dni, setDni] = useState('');
@@ -30,10 +31,19 @@ export default function AdministrarSocios() {
 
   const cargarSocios = async () =>{
     const res = await getSocios();
-    setSocios(res.data.data);
+    const sociosData = res.data.data;
+
+    const activos = sociosData.filter((s) => Array.isArray(s.afiliaciones) && s.afiliaciones.some(a => a && a.fechaFin === null));
+    const inactivos = sociosData.filter((s) => !Array.isArray(s.afiliaciones) || !s.afiliaciones.some(a => a && a.fechaFin === null));
+    setSociosActivos(activos);
+    setSociosInactivos(inactivos);
+
+    console.log('Socios cargados:', sociosData);
+    console.log('Socios activos:', activos);
   };
 
 const handleCrear = async (e) => {
+  try {
   e.preventDefault();
 
   if (!tipoAfiliacion.trim()) {
@@ -46,6 +56,7 @@ const handleCrear = async (e) => {
 
   await crearAfiliacion({
     fechaInicio: new Date(),
+    fechaFin: null,
     tipo: tipoAfiliacion,
     socio: socioId,
   });
@@ -57,30 +68,29 @@ const handleCrear = async (e) => {
   setTelefono('');
   setEmail('');
   setTipoAfiliacion('');
+}
+catch (error) {
+  console.log('Error al crear socio y afiliación', error.response?.data);
+}
 };
 
 
-  const handleEliminar = async (id) => {
-    try {
-      await eliminarSocio(id); 
-      cargarSocios();
-    } catch (error) {
-      console.error('Error al eliminar socio', error);
-      const message = error.response?.data?.message || '';
-
-      if (message.includes('foreign key') || message.includes('Cannot delete or update a parent row')) {
-        alert('No se puede eliminar este socio porque tiene embarcaciones asociadas.');
-      } else {
-        alert('Ocurrió un error al eliminar el socio.');
-      }
-  };
-  }
+  
   const handleEditar = async (id, socioEditar) => {
     try {
       await actualizarSocio(id, socioEditar);
       cargarSocios();
     } catch (error) {
       alert('Error al actualizar socio', error);
+    }
+  };
+
+  const handleBajaLogica = async (id) => {
+    try {
+      await bajaLogicaSocio(id);
+      cargarSocios();
+    } catch (error) {
+      alert('Error al dar de baja lógica al socio', error);
     }
   };
 
@@ -158,6 +168,11 @@ const handleCrear = async (e) => {
       </CCard>
 
       <div className="mt-4">
+        <CCard className="mb-4">
+        <CCardHeader>
+          <h4>Socios Activos</h4>
+        </CCardHeader>
+        <CCardBody>
         <EntityTable
           entityName="socio"
           columns={[
@@ -168,11 +183,34 @@ const handleCrear = async (e) => {
             { key: 'email', label: 'E-Mail' },
             { key: 'telefono', label: 'Teléfono' },
           ]}
-          data={socios}
-          onDelete={handleEliminar}
+          data={sociosActivos}
+          onDelete={handleBajaLogica}
           onEdit={handleEditar}
         />
+        </CCardBody>
+      </CCard>
       </div>
+      <CCard className="mt-4">
+        <CCardHeader>
+          <h4>Socios Inactivos</h4>
+        </CCardHeader>
+        <CCardBody>
+          <EntityTable
+            entityName="socio"
+            columns={[
+              { key: 'id', label: 'ID' },
+              { key: 'nombre', label: 'Nombre' },
+              { key: 'apellido', label: 'Apellido' },
+              { key: 'dni', label: 'DNI' },
+              { key: 'email', label: 'E-Mail' },
+              { key: 'telefono', label: 'Teléfono' },
+            ]}
+            data={sociosInactivos}
+            onDelete={handleBajaLogica}
+            onEdit={handleEditar}
+          />
+        </CCardBody>
+      </CCard>
     </div>
   );
 }
