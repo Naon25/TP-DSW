@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { getBoxes } from '../api/boxes.js';
 import { EntityTable } from '../components/TablaGenerica.jsx';
 import { CCard, CCardBody, CCardHeader, CRow, CCol } from '@coreui/react';
@@ -13,8 +13,14 @@ export default function ListarBoxes() {
   }, []);
 
   useEffect(() => {
-    filtrarBoxes();
-  }, [filtrarBoxes]);
+    if (boxes) {
+      if (filtroEstado === 'todos') {
+        setBoxesFiltrados(boxes);
+      } else {
+        setBoxesFiltrados(boxes.filter(box => box.estado === filtroEstado));
+      }
+    }
+  }, [boxes, filtroEstado]);
 
   const cargarBoxes = async () => {
     try {
@@ -24,14 +30,6 @@ export default function ListarBoxes() {
       console.error('Error al cargar boxes:', error);
     }
   };
-
-  const filtrarBoxes = useCallback(() => {
-    if (filtroEstado === 'todos') {
-      setBoxesFiltrados(boxes);
-    } else {
-      setBoxesFiltrados(boxes.filter(box => box.estado === filtroEstado));
-    }
-  }, [filtroEstado, boxes]);
 
   return (
     <div className="p-4">
@@ -62,20 +60,20 @@ export default function ListarBoxes() {
         </CCardBody>
       </CCard>
 
-      {boxes == null ? (
+      {boxesFiltrados == null ? (
         <div className="text-center p-4 border rounded">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Cargando...</span>
           </div>
           <p className="mt-2">Cargando boxes...</p>
         </div>
-      ) : !Array.isArray(boxes) ? (
+      ) : !Array.isArray(boxesFiltrados) ? (
         <div className="alert alert-warning">
           <strong>Error:</strong> Los datos no son un array válido.
           <br />
-          <small>Tipo recibido: {typeof boxes}</small>
+          <small>Tipo recibido: {typeof boxesFiltrados}</small>
         </div>
-      ) : boxes.length === 0 ? (
+      ) : boxesFiltrados.length === 0 ? (
         <div className="text-center p-4 border rounded">
           <h5>No hay boxes registrados</h5>
           <p className="text-muted">
@@ -98,7 +96,7 @@ export default function ListarBoxes() {
               </span>
             </div>
           </div>
-
+          
           <EntityTable
             entityName="box"
             entityNamePlural="boxes"
